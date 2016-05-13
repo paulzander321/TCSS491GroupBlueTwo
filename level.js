@@ -1,4 +1,5 @@
 var SCALE = 3; // The size of canvas divided by sprite_frame_width 
+
 var OFFSET_X = 16; // X offset from sprite background
 var OFFSET_Y = 464; // Y offset from sprite background
 
@@ -21,7 +22,8 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
-    if (this.game.right && !this.game.left && (this.xOffset < 512) && this.game.playerCanMove) {
+    if (this.game.right && !this.game.left && ((this.xOffset < 512 && this.yOffset == 0) 
+            || (this.yOffset <= 16 - 464)) && this.game.playerCanMove) {
         this.xOffset+= SCROLL_SPEED;
         this.game.scrolling = true;
     } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove) {
@@ -61,17 +63,14 @@ Platform.prototype.constructor = Platform;
 
 //Platforms need to scroll opposite direction of background at same speed in order to appear "still"
 Platform.prototype.update = function() {
-    if (this.game.left && this.game.scrolling) this.x+=SCALE * SCROLL_SPEED;
-    if (this.game.right && this.game.scrolling) this.x-=SCALE * SCROLL_SPEED;
-    if (this.game.up && this.game.scrolling) this.y+=SCALE * SCROLL_SPEED;
+    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=SCALE * SCROLL_SPEED;
+    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=SCALE * SCROLL_SPEED;
+    if (this.game.up && !this.game.right && !this.game.left && this.game.scrolling) this.y+=SCALE * SCROLL_SPEED;
     if (this.game.down && this.game.scrolling) this.y-=SCALE * SCROLL_SPEED;
 }
 
 //Draw red box around the platform for debugging
 Platform.prototype.draw = function(ctx) {
-    // this.game.ctx.strokeStyle = "Red";
-    // this.game.ctx.lineWidth = 3;
-    // this.game.ctx.strokeRect(this.x, this.y, this.width, this.height);
     Entity.prototype.draw.call(this);
 }
 

@@ -36,7 +36,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(p4);
     gameEngine.addEntity(p5);
     gameEngine.addEntity(p6);
-    gameEngine.addEntity(ld); //737, 337, 16, 192
+    gameEngine.addEntity(ld);
     gameEngine.addEntity(megaman);
     gameEngine.addEntity(jawa);
  

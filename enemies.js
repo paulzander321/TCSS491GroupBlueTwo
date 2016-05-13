@@ -28,6 +28,7 @@ Jawa.prototype.update = function() {
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
         if (this != ent && this.collision(ent) && (ent instanceof Shovel || ent instanceof Projectile)) {
+            this.shooting = true;
             this.removeFromWorld = true;
         }
     }
@@ -74,11 +75,13 @@ Jawa.prototype.draw = function (ctx) {
 }
 
 Jawa.prototype.collision = function(other) {
-    //Assumes other has x, y, width and height.
-    //Uses rectangular collision handling.
-    var collisionX = (other.x >= this.x && other.x <= this.x + this.currentAnimation.frameWidth * this.scaleBy) 
-                        || (other.x + other.width >= this.x && other.x + other.width <= this.x + this.currentAnimation.frameWidth * this.scaleBy);
-    var collisionY = (other.y <= this.y && other.y >= this.y - this.currentAnimation.frameHeight * this.scaleBy)
-                        || (other.y - other.height >= this.y && other.y <= this.y);
+    var collisionX = (this.x > other.x && this.x <= other.x + other.width) 
+                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
+                        || (this.x >= other.x && this.x + this.width <= other.x + other.width)
+                        || (other.x >= this.x && other.x + other.width <= this.x + this.width);
+    var collisionY = (this.y < other.y && this.y >= other.y - other.height)
+                        || (this.y > other.y && this.y - this.height > other.y - other.height)
+                        || (this.y < other.y && this.y - this.height > other.y - other.height)
+                        || (this.y > other.y && this.y - this.height < other.y - other.height);
     return collisionX && collisionY;
 }

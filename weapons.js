@@ -41,10 +41,8 @@ function Shovel(game, MegaMan, dx, dy) {
     this.dy = dy;
     if (this.dx >= 0) {
         this.x = this.orig.x + this.orig.shootAnimation.frameWidth * this.scaleBy + 10;
-    } else if (this.dx < 0) {
-        this.x = this.orig.x - this.width - 10;
     } else {
-        this.x = this.orig.x + this.orig.shootAnimation.frameWidth / 2;
+        this.x = this.orig.x - this.width - 10;
     }
     this.y = this.orig.y - this.orig.shootAnimation.frameHeight * this.orig.scaleBy / 2;
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 838, 635, 45, 13, 1.0, 1, true, true);

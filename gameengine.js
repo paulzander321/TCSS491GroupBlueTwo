@@ -37,7 +37,6 @@ function GameEngine() {
     this.wheel = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
-
 }
 
 GameEngine.prototype.init = function (ctx) {
@@ -46,6 +45,7 @@ GameEngine.prototype.init = function (ctx) {
     this.playerCanMove = true;
     this.backgroundMusic = new Audio("megaman-music.mp3");
     this.backgroundMusic.loop = true;
+    this.screenScrolling = false;
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.startInput();
