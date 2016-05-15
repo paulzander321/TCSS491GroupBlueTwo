@@ -1,7 +1,7 @@
 var SCALE = 3; // The size of canvas divided by sprite_frame_width 
 
-var OFFSET_X = 16; // X offset from sprite background
-var OFFSET_Y = 464; // Y offset from sprite background
+var OFFSET_X = 0; // X offset from sprite background
+var OFFSET_Y = 0; // Y offset from sprite background
 
 var SPRITE_FRAME_WIDTH = 258; //Width of sprite background frame
 var SPRITE_FRAME_HEIGHT = 230; //Height of sprite background frame
@@ -9,7 +9,6 @@ var SPRITE_FRAME_HEIGHT = 230; //Height of sprite background frame
 var SCROLL_SPEED = 1; // Scroll speed of background (uses sprite dimensions) in pixels per update
 
 function Background(game, x, y, width, height) {
-   // debugger;
     this.startX = x;
     this.startY = y;
     this.width = width;
@@ -23,18 +22,17 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
-    if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove) {
-        this.xOffset+= SCROLL_SPEED;
-        this.game.scrolling = true;
-    } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.yOffset >= 0 && this.game.playerCanMove) {
-        this.xOffset-= SCROLL_SPEED;
-        this.game.scrolling = true;
-    } else if (this.game.up && this.xOffset >= 3088 && this.game.playerCanMove) {
-        this.yOffset-= SCROLL_SPEED;
-        this.game.scrolling = true;
-    } else if (this.game.down && this.yOffset < 0 && this.game.playerCanMove) {
-        this.yOffset+= SCROLL_SPEED;
-        this.game.scrolling = true;
+    if (this.game.player && this.game.player.health > 0) {
+        if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving) {
+            this.xOffset+= SCROLL_SPEED;
+            this.game.scrolling = true;
+        } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.yOffset >= 0 && this.game.playerCanMove
+                    && !this.game.playerMoving) {
+            this.xOffset-= SCROLL_SPEED;
+            this.game.scrolling = true;
+        } else {
+            this.game.scrolling = false;
+        }
     } else {
         this.game.scrolling = false;
     }
@@ -89,5 +87,20 @@ Ladder.prototype.update = function () {
 }
 
 Ladder.prototype.draw = function (ctx) {
+    Platform.prototype.draw.call(this);
+}
+
+function Spikes(game, x, y, width, height) {
+    Platform.call(this, game, x, y, width, height);
+}
+
+Spikes.prototype = new Platform();
+Spikes.prototype.constructor = Spikes;
+
+Spikes.prototype.update = function () {
+    Platform.prototype.update.call(this);
+}
+
+Spikes.prototype.draw = function (ctx) {
     Platform.prototype.draw.call(this);
 }

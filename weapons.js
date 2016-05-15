@@ -1,30 +1,60 @@
-function Projectile(game, orig, dx, dy, x, y) {
+function Projectile(game, orig, y) {
     this.game = game;
     this.orig = orig;
     this.scaleBy = this.orig.scaleBy;
-    this.dx = dx;
-    this.dy = dy;
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 177, 76, 17, 13, .1, 2, true, false);
-    this.x = this.orig.x - 50;
-    this.y = (this.orig.y + this.orig.y - this.orig.height) / 2;
-    this.width = this.animation.frameWidth * this.scaleBy;
-    this.height = this.animation.frameHeight * this.scaleBy;
+    this.dx = 0;
+    this.dy = 0;
+    this.leftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 177, 76, 17, 13, .1, 2, true, false);
+    this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 173, 58, 17, 13, .1, 2, true, true);
+    if (y) {
+        this.y = y;
+    } else {
+        this.y = (this.orig.y + this.orig.y - this.orig.height) / 2;
+    }
+    this.currentAnimation = this.leftAnimation;
 }
 
 Projectile.prototype = new Entity();
 Projectile.prototype.constructor = Projectile;
 
 Projectile.prototype.update = function() {
+    for (var i = 0; i < this.game.entities.length; i++) {
+        var ent = this.game.entities[i];
+        if ((ent instanceof Platform || ent instanceof Ladder || ent instanceof Spikes) && this.collision(ent)) {
+            this.removeFromWorld = true;
+        }
+    }
+
     this.x += this.dx;
     this.y += this.dy;
     if (this.game.left && this.game.scrolling) this.x+=3 * 1;
     if (this.game.right && this.game.scrolling) this.x-=3 * 1;
-    Entity.call(this, this.game, this.x, this.y);
+    Entity.prototype.update.call(this);
 }
 
 Projectile.prototype.draw = function(ctx) {
-    this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
+    this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     Entity.prototype.draw.call(this);
+}
+
+Projectile.prototype.setDX = function(dx) {
+    this.dx = dx;
+    dx > 0 ? this.x = this.orig.x + this.orig.width + 15 : this.x = this.orig.x - 15;
+    dx > 0 ? this.currentAnimation = this.rightAnimation : this.currentAnimation = this.leftAnimation;
+    this.width = this.currentAnimation.frameWidth * this.scaleBy;
+    this.height = this.currentAnimation.frameHeight * this.scaleBy;
+}
+
+Projectile.prototype.collision = function(other) {
+    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
+                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
+                        || (this.x >= other.x && this.x + this.width <= other.x + other.width)
+                        || (other.x >= this.x && other.x + other.width <= this.x + this.width);
+    var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
+                        || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
+                        || (this.y - this.height >= other.y - other.height && this.y <= other.y)
+                        || (other.y <= this.y && other.y - other.height >= this.y - this.height);
+    return collisionX && collisionY;
 }
 
 function Shovel(game, MegaMan, dx, dy) {

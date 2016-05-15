@@ -31,6 +31,7 @@ function GameEngine() {
     this.playerCount = 1;
     this.entities = [];
     this.showOutlines = true;
+    this.player = null;
     this.ctx = null;
     this.click = null;
     this.mouse = null;
@@ -43,7 +44,7 @@ GameEngine.prototype.init = function (ctx) {
     this.ctx = ctx;
     this.scrolling = false;
     this.playerCanMove = true;
-    this.backgroundMusic = new Audio("megaman-music.mp3");
+    this.backgroundMusic = new Audio("./sound/megaman-music.mp3");
     this.backgroundMusic.loop = true;
     this.screenScrolling = false;
     this.surfaceWidth = this.ctx.canvas.width;
