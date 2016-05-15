@@ -3,11 +3,12 @@ var OFFSET_X = 16; // X offset from sprite background
 var OFFSET_Y = 464; // Y offset from sprite background
 
 var SPRITE_FRAME_WIDTH = 258; //Width of sprite background frame
-var SPRITE_FRAME_HEIGHT = 224; //Height of sprite background frame
+var SPRITE_FRAME_HEIGHT = 230; //Height of sprite background frame
 
 var SCROLL_SPEED = 1; // Scroll speed of background (uses sprite dimensions) in pixels per update
 
 function Background(game, x, y, width, height) {
+   // debugger;
     this.startX = x;
     this.startY = y;
     this.width = width;
@@ -21,13 +22,13 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
-    if (this.game.right && !this.game.left && (this.xOffset < 512) && this.game.playerCanMove) {
+    if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove) {
         this.xOffset+= SCROLL_SPEED;
         this.game.scrolling = true;
     } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove) {
         this.xOffset-= SCROLL_SPEED;
         this.game.scrolling = true;
-    } else if (this.game.up && this.xOffset >= 512 && this.game.playerCanMove) {
+    } else if (this.game.up && this.xOffset >= 3088 && this.game.playerCanMove) {
         this.yOffset-= SCROLL_SPEED;
         this.game.scrolling = true;
     } else if (this.game.down && this.yOffset < 0 && this.game.playerCanMove) {
@@ -39,7 +40,8 @@ Background.prototype.update = function () {
 }
 
 Background.prototype.draw = function (ctx) {
-    ctx.drawImage(ASSET_MANAGER.getAsset("./img/megaman-background.png"),
+    //debugger;
+    ctx.drawImage(ASSET_MANAGER.getAsset("./img/stage.png"),
                   this.startX + this.xOffset, this.startY + this.yOffset,  // source from sheet
                   SPRITE_FRAME_WIDTH, SPRITE_FRAME_HEIGHT,
                   0, 0,
