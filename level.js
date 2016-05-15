@@ -26,7 +26,7 @@ Background.prototype.update = function () {
             || (this.yOffset <= 16 - 464)) && this.game.playerCanMove) {
         this.xOffset+= SCROLL_SPEED;
         this.game.scrolling = true;
-    } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove) {
+    } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.yOffset >= 0 && this.game.playerCanMove) {
         this.xOffset-= SCROLL_SPEED;
         this.game.scrolling = true;
     } else if (this.game.up && this.xOffset >= 512 && this.game.playerCanMove) {
@@ -66,7 +66,7 @@ Platform.prototype.update = function() {
     if (this.game.left && !this.game.right && this.game.scrolling) this.x+=SCALE * SCROLL_SPEED;
     if (this.game.right && !this.game.left && this.game.scrolling) this.x-=SCALE * SCROLL_SPEED;
     if (this.game.up && !this.game.right && !this.game.left && this.game.scrolling) this.y+=SCALE * SCROLL_SPEED;
-    if (this.game.down && this.game.scrolling) this.y-=SCALE * SCROLL_SPEED;
+    if (this.game.down && !this.game.right && !this.game.left && this.game.scrolling) this.y-=SCALE * SCROLL_SPEED;
 }
 
 //Draw red box around the platform for debugging

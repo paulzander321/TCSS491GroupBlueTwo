@@ -24,7 +24,8 @@ ASSET_MANAGER.downloadAll(function () {
     var p4 = new Platform(gameEngine, 704, 608 + 80, 80, 80);
     var p5 = new Platform(gameEngine, 608, 592 + 16, 64, 16);
     var p6 = new Platform(gameEngine, 608, 560 + 48, 32, 48);
-    var p7 = new Platform(gameEngine, 688, 528 + 48, 32, 48);
+    var p7 = new Platform(gameEngine, 576, 576, 32, 48);
+    var p8 = new Platform(gameEngine, 688, 544, 64, 16);
     var ld = new Ladder(gameEngine, 736, 336 + 192, 16, 192);
 
     var jawa = new Jawa(gameEngine, 500, 574);
@@ -36,6 +37,8 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(p4);
     gameEngine.addEntity(p5);
     gameEngine.addEntity(p6);
+    gameEngine.addEntity(p7)
+    gameEngine.addEntity(p8);
     gameEngine.addEntity(ld);
     gameEngine.addEntity(megaman);
     gameEngine.addEntity(jawa);

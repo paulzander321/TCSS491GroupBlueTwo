@@ -24,11 +24,6 @@ Projectile.prototype.update = function() {
 
 Projectile.prototype.draw = function(ctx) {
     this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
-    // if (this.game.showOutlines && this.width && this.height) {
-    //     this.game.ctx.strokeStyle = "Red";
-    //     this.game.ctx.lineWidth = 3;
-    //     this.game.ctx.strokeRect(this.x, this.y - this.height, this.width, this.height);
-    // }
     Entity.prototype.draw.call(this);
 }
 

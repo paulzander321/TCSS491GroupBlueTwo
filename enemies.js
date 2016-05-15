@@ -3,6 +3,7 @@ function Jawa(game, x, y) {
     this.y = y;
     this.game = game;
     this.scaleBy = 1.5;
+    this.health = 3;
     this.walking = true;
     this.shooting = false;
     this.hasShot = false;
@@ -28,16 +29,19 @@ Jawa.prototype.update = function() {
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
         if (this != ent && this.collision(ent) && (ent instanceof Shovel || ent instanceof Projectile)) {
-            this.shooting = true;
-            this.removeFromWorld = true;
+            // this.shooting = true;
+            ent.removeFromWorld = true;
+            this.health--;
+            console.log("Jawa was hit!");
         }
     }
+
+    if (this.health < 0) this.removeFromWorld = true;
 
     if (this.game.left && this.game.scrolling) this.x+=3 * 1;
     if (this.game.right && this.game.scrolling) this.x-=3 * 1;
 
     if (this.walking) this.x -= 1;
-    if (this.x < -30) this.x = 830;
 
     if (this.shooting) {
         if (this.shootAnimation.isDone()) {
@@ -52,7 +56,7 @@ Jawa.prototype.update = function() {
             this.hasShot = true;
         }
     }
-    Entity.call(this, this.game, this.x, this.y);
+    Entity.prototype.update.call(this);
 }
 
 Jawa.prototype.draw = function (ctx) {
@@ -66,22 +70,17 @@ Jawa.prototype.draw = function (ctx) {
     this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
-    // if (this.game.showOutlines && this.width && this.height) {
-    //     this.game.ctx.strokeStyle = "Red";
-    //     this.game.ctx.lineWidth = 3;
-    //     this.game.ctx.strokeRect(this.x, this.y - this.height, this.width, this.height);
-    // }
     Entity.prototype.draw.call(this);
 }
 
 Jawa.prototype.collision = function(other) {
-    var collisionX = (this.x > other.x && this.x <= other.x + other.width) 
+    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
                         || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
                         || (this.x >= other.x && this.x + this.width <= other.x + other.width)
                         || (other.x >= this.x && other.x + other.width <= this.x + this.width);
-    var collisionY = (this.y < other.y && this.y >= other.y - other.height)
-                        || (this.y > other.y && this.y - this.height > other.y - other.height)
-                        || (this.y < other.y && this.y - this.height > other.y - other.height)
-                        || (this.y > other.y && this.y - this.height < other.y - other.height);
+    var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
+                        || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
+                        || (this.y - this.height >= other.y - other.height && this.y <= other.y)
+                        || (other.y <= this.y && other.y - other.height >= this.y - this.height);
     return collisionX && collisionY;
 }

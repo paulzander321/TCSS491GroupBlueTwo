@@ -150,11 +150,6 @@ GameEngine.prototype.draw = function () {
     this.ctx.restore();
 }
 
-GameEngine.prototype.deleteLastAdded = function() {
-    this.entities.pop();
-    console.log("Entity Removed");
-}
-
 GameEngine.prototype.update = function () {
     var entitiesCount = this.entities.length;
 
@@ -213,4 +208,16 @@ Entity.prototype.rotateAndCache = function (image, angle) {
     //offscreenCtx.strokeStyle = "red";
     //offscreenCtx.strokeRect(0,0,size,size);
     return offscreenCanvas;
+}
+
+Entity.prototype.collision = function(other) {
+    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
+                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
+                        || (this.x >= other.x && this.x + this.width <= other.x + other.width)
+                        || (other.x >= this.x && other.x + other.width <= this.x + this.width);
+    var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
+                        || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
+                        || (this.y - this.height >= other.y - other.height && this.y <= other.y)
+                        || (other.y <= this.y && other.y - other.height >= this.y - this.height);
+    return collisionX && collisionY;
 }

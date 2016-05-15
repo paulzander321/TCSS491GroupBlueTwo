@@ -1,8 +1,8 @@
 //Creates new player who will be controlled by user.
 function MegaMan(game, x, y, scaleBy) {
     this.scaleBy = scaleBy;
+    this.shootFrequency = 500; //Milliseconds per projectile
     this.facingRight = true;
-    this.shootCount = 0;
     this.health = 5;
     this.jumping = false;
     this.doubleJumping = false;
@@ -12,6 +12,7 @@ function MegaMan(game, x, y, scaleBy) {
     this.ladder = null;
     this.canShoot = true;
     this.platform = null;
+    this.collisionRight = false;
 
     this.deathSound = new Audio("atomic-bomb.mp3");
     this.ouch = new Audio("ouch.mp3");
@@ -99,13 +100,20 @@ MegaMan.prototype.update = function() {
             
         } else if (ent instanceof Ladder && this.collision(ent)) {
             this.ladder = ent;
+            this.falling = false;
             console.log("Near ladder!");
         } else if (ent instanceof Platform && this.collision(ent)) {
-            // if (!this.jumping) this.y = ent.y - ent.height;
-            // if (this.jumping) this.jumping = false;
-            if (ent != this.platform) this.playerCanMove = false;
             this.falling = false;
             this.platform = ent;
+        }
+
+
+
+        //If Megaman hits a platform from below and he is jumping, will make him start to fall
+        if (this != ent && ent instanceof Platform && this.collisionAbove(ent)) {
+            this.jumping = false;
+            this.jumpAnimation.elapsedTime = 0;
+            this.falling = true;
         }
     }
 
@@ -113,14 +121,14 @@ MegaMan.prototype.update = function() {
     if (!this.dying) {
 
         //Shooting code
-
         if (this.game.shooting && this.canShoot) {
             var shovel = new Shovel(this.game, this, 5, 0);
             this.game.addEntity(shovel);
-            setInterval(function () {
-                that.shooting = true;
-                that.walking = false;
-            }, 2000);
+            this.canShoot = false;
+            var that = this;
+            setInterval(function () { // This should be delay only once, not repeating interval.
+                that.canShoot = true;
+            }, this.shootFrequency);
         }
 
         // Will be used when Mega Man is colliding with a ladder entity.
@@ -141,7 +149,7 @@ MegaMan.prototype.update = function() {
                 this.jumping = false;
                 if (this.y < this.platform.y - this.platform.height) this.falling = true;
             }
-            this.y -= (this.jumpAnimation.totalTime - this.jumpAnimation.elapsedTime) * 10;
+            this.y -= 7 - this.jumpAnimation.elapsedTime * 10;
         }
     }
 
@@ -159,6 +167,8 @@ MegaMan.prototype.draw = function (ctx) {
         this.currentAnimation = this.fallRightAnimation;
     } else if (this.falling && !this.facingRight) {
         this.currentAnimation = this.fallLeftAnimation;
+    } else if (this.ladder && this.collision(this.ladder)) {
+        this.currentAnimation = this.climbAnimation;
     } else if (this.game.right && this.game.down && !this.game.left) {
         this.currentAnimation = this.rollRightAnimation;
         this.facingRight = true;
@@ -196,13 +206,33 @@ MegaMan.prototype.draw = function (ctx) {
 //Checks to see if Mega Man is colliding with another object based on width, height, and x, y coordinates.
 //Uses rectangular collisions.
 MegaMan.prototype.collision = function(other) {
-    var collisionX = (this.x >= other.x && this.x <= other.x + other.width) //GOOD
-                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width) //GOOD
+    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
+                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
                         || (this.x >= other.x && this.x + this.width <= other.x + other.width)
                         || (other.x >= this.x && other.x + other.width <= this.x + this.width);
     var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
                         || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
                         || (this.y - this.height >= other.y - other.height && this.y <= other.y)
                         || (other.y <= this.y && other.y - other.height >= this.y - this.height);
+    return collisionX && collisionY;
+}
+
+MegaMan.prototype.collisionAbove = function(other) {
+    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
+                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
+                        || (this.x >= other.x && this.x + this.width <= other.x + other.width)
+                        || (other.x >= this.x && other.x + other.width <= this.x + this.width);
+    var collisionY = (this.y - this.height >= other.y - other.height && this.y - this.height <= other.y);
+    if (collisionY && collisionX) console.log("Collision Above!!!");
+    return collisionX && collisionY;
+}
+
+MegaMan.prototype.collisionRight = function(other) {
+    var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
+                        || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
+                        || (this.y - this.height >= other.y - other.height && this.y <= other.y)
+                        || (other.y <= this.y && other.y - other.height >= this.y - this.height);
+    var collisionX = (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width);
+    if (collisionY && collisionX) console.log("Collision Right");
     return collisionX && collisionY;
 }
