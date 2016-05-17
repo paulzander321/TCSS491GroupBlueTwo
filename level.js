@@ -23,11 +23,10 @@ Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
     if (this.game.player && this.game.player.health > 0) {
-        if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving) {
+        if (this.game.right && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving) {
             this.xOffset+= SCROLL_SPEED;
             this.game.scrolling = true;
-        } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.yOffset >= 0 && this.game.playerCanMove
-                    && !this.game.playerMoving) {
+        } else if (this.game.left && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving) {
             this.xOffset-= SCROLL_SPEED;
             this.game.scrolling = true;
         } else {
