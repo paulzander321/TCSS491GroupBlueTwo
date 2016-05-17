@@ -15,20 +15,12 @@ Things to do:
 3. 1 Boss 
 
 * MEGAMAN
-1. A way to display Health (ALEX)
-2. Jump and shoot animation (PAUL)
-3. No shooting while crawling (PAUL)
-4. While rolling needs to come out of roll and jump when space is triggered (PAUL)
-5. When he takes damage he needs to flicker and become invincible (PAUL)
+1. A way to display Health (ALEX) 1
+2. Jump and shoot animation (PAUL) 2
+3. No shooting while crawling (PAUL) 3 
+4. While rolling needs to come out of roll and jump when space is triggered (PAUL) 4
+5. When he takes damage he needs to flicker and become invincible (PAUL) 5
 
-
-
-* Make scrolling start again only when player's x coordinate is middle of screen.
-* We have bug when he isnt dead center or shifts the screen locks again. 
-* Add some dumb enemies and maybe a smarter enemy type. 
-* **Fix wall collisions** - Player should not be able to walk through the side of platforms.
-* Add logic for collisions with enemies and death logic for enemies. 
-* 
 
 
 
