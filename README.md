@@ -2,7 +2,7 @@ TCSS 491 - Blue Two
 ==========================
 Things to do:
 -----------------------
-MAP (SHAWN)
+* MAP (SHAWN)
 1. Fix the random frame freezing when in the middle of the map 1
   1. The ability to move once we click left and right rapidly 1.1
 2. Lock the screen when at the end of the map
