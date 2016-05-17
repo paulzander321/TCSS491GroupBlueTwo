@@ -2,19 +2,19 @@ TCSS 491 - Blue Two
 ==========================
 Things to do:
 -----------------------
-* MAP (SHAWN)
+**MAP (SHAWN)**
 1. Fix the random frame freezing when in the middle of the map 1
   1. The ability to move once we click left and right rapidly 1.1
 2. Lock the screen when at the end of the map
 3. Walking through platforms 
 
-* ENEMIES (BUN & RICHARD)
+**ENEMIES (BUN & RICHARD)**
 1. 2 Dumb Enemies
   1. 1 who crawls and does damage with contact 1.1
   2. 1 who flys and does damage with contact
 3. 1 Boss 
 
-* MEGAMAN
+**MEGAMAN**
 1. A way to display Health (ALEX) 1
 2. Jump and shoot animation (PAUL) 2
 3. No shooting while crawling (PAUL) 3 
