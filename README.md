@@ -2,11 +2,26 @@ TCSS 491 - Blue Two
 ==========================
 Things to do:
 -----------------------
+MAP (SHAWN)
+1. Fix the random frame freezing when in the middle of the map 1
+  1. The ability to move once we click left and right rapidly 1.1
+2. Lock the screen when at the end of the map
+3. Walking through platforms 
+
+ENEMIES
+
+MEGAMAN
+
+
+
 * Make scrolling start again only when player's x coordinate is middle of screen.
-*   -We have bug when he isnt dead center or shifts the screen locks again. 
+* We have bug when he isnt dead center or shifts the screen locks again. 
 * Add some dumb enemies and maybe a smarter enemy type. 
 * **Fix wall collisions** - Player should not be able to walk through the side of platforms.
 * Add logic for collisions with enemies and death logic for enemies. 
+* 
+
+
 
 DONE: 
 ------------------------
