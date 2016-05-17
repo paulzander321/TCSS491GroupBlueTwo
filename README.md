@@ -8,9 +8,18 @@ Things to do:
 2. Lock the screen when at the end of the map
 3. Walking through platforms 
 
-ENEMIES
+* ENEMIES (BUN & RICHARD)
+1. 2 Dumb Enemies
+  1. 1 who crawls and does damage with contact 1.1
+  2. 1 who flys and does damage with contact
+3. 1 Boss 
 
-MEGAMAN
+* MEGAMAN
+1. A way to display Health (ALEX)
+2. Jump and shoot animation (PAUL)
+3. No shooting while crawling (PAUL)
+4. While rolling needs to come out of roll and jump when space is triggered (PAUL)
+5. When he takes damage he needs to flicker and become invincible (PAUL)
 
 
 
