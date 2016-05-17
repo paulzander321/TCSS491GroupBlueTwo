@@ -101,7 +101,7 @@ ASSET_MANAGER.downloadAll(function () {
     var spikesTest = new Spikes(gameEngine, 695, 140, 31, 17);
     var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 17);
     var spikes3 = new Spikes(gameEngine, 1238, 189, 33, 18);
-    var ladder = new Ladder(gameEngine, 856, 205, 16, 46);
+    // var ladder = new Ladder(gameEngine, 856, 205, 16, 46);
     // var sp = new SandPerson(gameEngine, 215 * 3, 158 * 3);
     var jawa = new Jawa(gameEngine, 1625, 158, p2);
     var jawa2 = new Jawa(gameEngine, 632, 110);
@@ -111,7 +111,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(bg);
     gameEngine.addEntity(spikes2);
     gameEngine.addEntity(spikes3);
-    gameEngine.addEntity(ladder);
+    // gameEngine.addEntity(ladder);
     gameEngine.addEntity(p);
     gameEngine.addEntity(p2);
     gameEngine.addEntity(p3);

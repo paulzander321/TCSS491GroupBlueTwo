@@ -93,8 +93,8 @@ MegaMan.prototype.update = function() {
     if (this.game.left && !this.game.right) this.facingRight = false;
 
     //If Megaman runs off edges of his current platform he will start to fall 
-    if (this.platform && this.x > this.platform.x + this.platform.width) this.falling = true; 
-    if (this.platform && this.x + this.width < this.platform.x) this.falling = true;
+    if (this.platform && this.x > this.platform.x + this.platform.width && !this.jumping) this.falling = true; 
+    if (this.platform && this.x + this.width < this.platform.x && !this.jumping) this.falling = true;
 
     //If megaman falls off map HE DEAD!!
     if (this.y - this.height > this.game.ctx.canvas.height) this.health = -1;
@@ -131,6 +131,7 @@ MegaMan.prototype.update = function() {
             this.jumping = false;
             this.jumpAnimation.elapsedTime = 0;
             this.falling = true;
+            console.log("CollisionAbove!");
         }
     }
 
@@ -258,12 +259,13 @@ MegaMan.prototype.collisionAbove = function(other) {
     return collisionX && collisionY;
 }
 
-MegaMan.prototype.collisionRight = function(other) {
+MegaMan.prototype.collisionSide = function(other) {
     var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
                         || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
                         || (this.y - this.height >= other.y - other.height && this.y <= other.y)
                         || (other.y <= this.y && other.y - other.height >= this.y - this.height);
-    var collisionX = (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width);
+    var collisionX = (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width
+                        || (this.x <= other.x + other.width && this.x > other.x));
     if (collisionY && collisionX) console.log("Collision Right");
     return collisionX && collisionY;
 }

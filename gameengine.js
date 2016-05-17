@@ -41,6 +41,7 @@ function GameEngine() {
 }
 
 GameEngine.prototype.init = function (ctx) {
+    this.gamepads = [];
     this.ctx = ctx;
     this.scrolling = false;
     this.playerCanMove = true;
@@ -101,8 +102,9 @@ GameEngine.prototype.startInput = function () {
         }
 
         if (String.fromCharCode(e.which) === 'a' && that.playerCount < 1) {
-            var tempMega = new MegaMan(that, Math.floor(Math.random() * 800), 505, 1.5);
+            var tempMega = new MegaMan(that, Math.floor(Math.random() * 800), 300, 1.5);
             that.addEntity(tempMega);
+            that.player = tempMega;
             that.playerCount++;
         }
 
