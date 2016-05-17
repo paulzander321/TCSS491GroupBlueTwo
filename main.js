@@ -17,6 +17,39 @@ ASSET_MANAGER.downloadAll(function () {
     var bg = new Background(gameEngine, 0, 0, ctx.width, ctx.height);
     gameEngine.player = new MegaMan(gameEngine, 400, 500, 1.5, true);
 
+
+    var r = new Platform(gameEngine, 631, 16, 722 - 631, 16);
+    var r1 = new Platform(gameEngine, 726, 30, 759 - 726, 30);
+    var r2 = new Platform(gameEngine, 759, 46, 822 - 759, 46);
+    var r3 = new Platform(gameEngine, 823, 64, 887 - 823, 64);
+    var r4 = new Platform(gameEngine, 887, 47, 1015 - 887, 47);
+    var r5 = new Platform(gameEngine, 1015, 95, 1079 - 1015, 95);
+    var r6 = new Platform(gameEngine, 1079, 79, 1142 - 1079, 79);
+    var r7 = new Platform(gameEngine, 1143, 95, 1207 - 1143, 95);
+    var r8 = new Platform(gameEngine, 1208, 64, 1239 - 1208, 64);
+    var r9 = new Platform(gameEngine, 1239, 31, 1527 - 1239, 31);
+    var r10 = new Platform(gameEngine, 1527, 46, 1623 - 1527, 46);
+    var r11 = new Platform(gameEngine, 1623, 31, 1688 - 1623, 31);
+    var r12 = new Platform(gameEngine, 1688, 44, 1750 - 1688, 44);
+    var r13 = new Platform(gameEngine, 1750, 28, 1816 - 1750, 28);
+    var r14 = new Platform(gameEngine, 1815, 45, 1977 - 1815, 45);
+    var r15 = new Platform(gameEngine, 1977, 61, 2008 - 1977, 61);
+    var r16 = new Platform(gameEngine, 2007, 93, 2039 - 2007, 93);
+    var r17 = new Platform(gameEngine, 2039, 76, 2070 - 2039, 76);
+    var r18 = new Platform(gameEngine, 2071, 93, 2102 - 2071, 93);
+    var r19 = new Platform(gameEngine, 2103, 61, 2199 - 2103, 61);
+    var r20 = new Platform(gameEngine, 2199, 45, 2199 - 2231, 45);
+    var r21 = new Platform(gameEngine, 2231, 62, 2263 - 2231, 62);
+    var r22 = new Platform(gameEngine, 2263, 29, 2488 - 2263, 29);
+    var r23 = new Platform(gameEngine, 2488, 92, 2550 - 2488, 92);
+    var r24 = new Platform(gameEngine, 2550, 77, 2597 - 2550, 77);
+    var r25 = new Platform(gameEngine, 2611, 29, 2643 - 2611, 29);
+    var r26 = new Platform(gameEngine, 2643, 45, 2674 - 2643, 45);
+    var r27 = new Platform(gameEngine, 2675, 77, 2739 - 2675, 77);
+    var r28 = new Platform(gameEngine, 2739, 109, 2803 - 2739, 109);
+    var r29 = new Platform(gameEngine, 2803, 140, 3107 - 2803, 140);
+    var r30 = new Platform(gameEngine, 3107, 28, 3331 - 3107, 28);
+
     //Platform parameters are (gameEngine, x, y, width, and height from spritesheet)
     var p = new Platform(gameEngine, 0, 230, 215, 40);
     var p2 = new Platform(gameEngine, 214, 230, 130, 72);
@@ -72,6 +105,8 @@ ASSET_MANAGER.downloadAll(function () {
     // var sp = new SandPerson(gameEngine, 215 * 3, 158 * 3);
     var jawa = new Jawa(gameEngine, 1625, 158, p2);
     var jawa2 = new Jawa(gameEngine, 632, 110);
+
+
 
     gameEngine.addEntity(bg);
     gameEngine.addEntity(spikes2);
@@ -132,4 +167,38 @@ ASSET_MANAGER.downloadAll(function () {
  
     gameEngine.init(ctx);
     gameEngine.start();
+
+    gameEngine.addEntity(r);
+    gameEngine.addEntity(r1);
+    gameEngine.addEntity(r2);
+    gameEngine.addEntity(r3);
+    gameEngine.addEntity(r4);
+    gameEngine.addEntity(r5);
+    gameEngine.addEntity(r6);
+    gameEngine.addEntity(r7);
+    gameEngine.addEntity(r8);
+    gameEngine.addEntity(r9);
+    gameEngine.addEntity(r10);
+    gameEngine.addEntity(r11);
+    gameEngine.addEntity(r12);
+    gameEngine.addEntity(r13);
+    gameEngine.addEntity(r14);
+    gameEngine.addEntity(r15);
+    gameEngine.addEntity(r16);
+    gameEngine.addEntity(r17);
+    gameEngine.addEntity(r18);
+    gameEngine.addEntity(r19);
+    gameEngine.addEntity(r20);
+    gameEngine.addEntity(r21);
+    gameEngine.addEntity(r22);
+    gameEngine.addEntity(r23);
+    gameEngine.addEntity(r24);
+    gameEngine.addEntity(r25);
+    gameEngine.addEntity(r26);
+    gameEngine.addEntity(r27);
+    gameEngine.addEntity(r28);
+    gameEngine.addEntity(r29);
+    gameEngine.addEntity(r30);
+
+
 });
