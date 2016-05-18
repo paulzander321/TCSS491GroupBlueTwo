@@ -8,7 +8,7 @@ Things to do:
 2. Lock the screen when at the end of the map 
 3. Walking through platforms 
 
-## **ENEMIES (BUN & RICHARD)**
+## **ENEMIES (Nick & RICHARD)**
 1. 2 Dumb Enemies
   1. 1 who crawls and does damage with contact 
   2. 1 who flys and does damage with contact 
