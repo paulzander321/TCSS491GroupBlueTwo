@@ -139,8 +139,8 @@ MegaMan.prototype.update = function() {
     if (!this.dying) {
 
         //When the game can't scroll anymore, Megaman will now be able to move 
-        if (!this.game.screenScrolling && this.game.right && !this.game.left && this.x + this.width < 3330) this.x += 3;
-        if (!this.game.screenScrolling && this.game.left && !this.game.right && this.x > 0) this.x -= 3;
+        if (!this.game.scrolling && !this.game.screenScrolling && this.game.right && !this.game.left && this.x + this.width < 3330) this.x += 3;
+        if (!this.game.scrolling && !this.game.screenScrolling && this.game.left && !this.game.right && this.x > 0) this.x -= 3;
         if (this.x > 350 && this.x < 450) this.game.screenScrolling = true;
         if (!this.game.scrolling) this.game.screenScrolling = false;
 
