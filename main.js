@@ -97,6 +97,8 @@ ASSET_MANAGER.downloadAll(function () {
     var p44 = new Platform(gameEngine, 2724, 230, 2739 - 2724, 230 - 170);
     var p45 = new Platform(gameEngine, 2739, 230, 3331 - 2739, 230 - 188); 
     var p46 = new Platform(gameEngine, 3331, 230, 3346 - 3331, 230 - 0);
+
+    var hBar = new HealthBar(gameEngine, 2, 7, 50, 5);
     
     var spikesTest = new Spikes(gameEngine, 695, 140, 31, 17);
     var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 17);
@@ -161,6 +163,8 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(p44);
     gameEngine.addEntity(p45);
     gameEngine.addEntity(p46);
+
+    gameEngine.addEntity(hBar);
 
     gameEngine.addEntity(sp);
     gameEngine.addEntity(spikesTest);

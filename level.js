@@ -48,6 +48,27 @@ Background.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 }
 
+function HealthBar(game, x, y, width, height){
+    this.game = game;
+    this.x = (x - OFFSET_X) * SCALE; // Calculations to match up sprite dimensions with canvas dimensions
+    this.y = (y - OFFSET_Y) * SCALE;
+    this.width = width * SCALE;
+    this.height = height * SCALE;
+}
+
+HealthBar.prototype = new Entity();
+HealthBar.prototype.constructor = HealthBar;
+
+HealthBar.prototype.update = function() {
+    this.width = this.game.player.currentHealth * 20;
+    Entity.prototype.fill.call(this);
+}
+
+HealthBar.prototype.draw = function(ctx){
+    Entity.prototype.hdraw.call(this);
+    Entity.prototype.fill.call(this);
+}
+
 function Platform(game, x, y, width, height) {
     this.game = game;
     this.x = (x - OFFSET_X) * SCALE; // Calculations to match up sprite dimensions with canvas dimensions

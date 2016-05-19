@@ -197,6 +197,22 @@ Entity.prototype.draw = function (ctx) {
     }
 }
 
+Entity.prototype.hdraw = function (ctx){
+    this.game.ctx.strokeStyle = 'black';
+    this.game.ctx.lineWidth = 2;
+    this.game.ctx.strokeRect(this.x, this.y - this.height, 100, this.height);
+
+}
+
+Entity.prototype.fill = function (ctx) {
+    if (this.game.player.currerntHealth < 3){
+        this.game.ctx.fillStyle = 'red';
+    }else{
+        this.game.ctx.fillStyle = 'green';
+    }
+    this.game.ctx.fillRect(this.x, this.y - this.height, this.width, this.height);
+}
+
 Entity.prototype.rotateAndCache = function (image, angle) {
     var offscreenCanvas = document.createElement('canvas');
     var size = Math.max(image.width, image.height);
