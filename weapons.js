@@ -24,11 +24,10 @@ Projectile.prototype.update = function() {
             this.removeFromWorld = true;
         }
     }
-
     this.x += this.dx;
     this.y += this.dy;
-    if (this.game.left && this.game.scrolling) this.x+=3 * 1;
-    if (this.game.right && this.game.scrolling) this.x-=3 * 1;
+    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
+    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
     Entity.prototype.update.call(this);
 }
 

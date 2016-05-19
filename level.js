@@ -22,12 +22,12 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
-    if (this.game.player && this.game.player.health > 0) {
+    if (this.game.player && this.game.player.currentHealth > 0) {
         if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving) {
-            this.xOffset+= SCROLL_SPEED;
+            this.xOffset+= this.game.scrollSpeed;
             this.game.scrolling = true;
         } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving) {
-            this.xOffset-= SCROLL_SPEED;
+            this.xOffset-= this.game.scrollSpeed;
             this.game.scrolling = true;
         } else {
             this.game.scrolling = false;
@@ -61,10 +61,10 @@ Platform.prototype.constructor = Platform;
 
 //Platforms need to scroll opposite direction of background at same speed in order to appear "still"
 Platform.prototype.update = function() {
-    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=SCALE * SCROLL_SPEED;
-    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=SCALE * SCROLL_SPEED;
-    if (this.game.up && !this.game.right && !this.game.left && this.game.scrolling) this.y+=SCALE * SCROLL_SPEED;
-    if (this.game.down && !this.game.right && !this.game.left && this.game.scrolling) this.y-=SCALE * SCROLL_SPEED;
+    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=SCALE * this.game.scrollSpeed;
+    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=SCALE * this.game.scrollSpeed;
+    if (this.game.up && !this.game.right && !this.game.left && this.game.scrolling) this.y+=SCALE * this.game.scrollSpeed;
+    if (this.game.down && !this.game.right && !this.game.left && this.game.scrolling) this.y-=SCALE * this.game.scrollSpeed;
 }
 
 //Draw red box around the platform for debugging

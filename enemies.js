@@ -8,6 +8,7 @@ function Jawa(game, x, y, platform) {
     this.shooting = false;
     this.proneShot = false;
     this.hasShot = false;
+    this.invisible = false;
     var that = this;
     this.walkAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 3, 8, 28, 37, .2, 4, true, false);
     this.shootAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 158, 99, 39, 35, .2, 3, false, false);
@@ -38,6 +39,14 @@ Jawa.prototype.update = function() {
                 this.health--;
                 this.utini.play();
                 console.log("Jawa was hit!");
+                var that = this;
+                var invisibleInterval = setInterval(function() {
+                    that.invisible = !that.invisible;
+                }, 50);
+                setTimeout(function() {
+                    clearInterval(invisibleInterval);
+                    that.invisible = false;
+                }, 500);
             } else if (ent instanceof Platform && this.collision(ent)) {
                 this.platform = ent;
             }
@@ -67,8 +76,8 @@ Jawa.prototype.update = function() {
         }
         Entity.prototype.update.call(this);
     }
-    if (this.game.left && this.game.scrolling) this.x+=3 * 1;
-    if (this.game.right && this.game.scrolling) this.x-=3 * 1;
+    if (this.game.left && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
+    if (this.game.right && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
 }
 
 Jawa.prototype.draw = function (ctx) {
@@ -83,7 +92,7 @@ Jawa.prototype.draw = function (ctx) {
     } else {
         this.currentAnimation = this.stillAnimation;
     }
-    this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
+    if (!this.invisible) this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.prototype.draw.call(this);
@@ -107,13 +116,14 @@ function SandPerson(game, x, y) {
     this.tuskenCry = new Audio("./sound/tusken_cry.mp3");
     this.tuskenCry.play();
     this.crying = true;
+    this.invisible = false;
     this.raiderAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 178, 196, 38, 70, .3, 2, true, false);
     this.stillAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 178, 196, 38, 70, .3, 1, true, false);
     this.currentAnimation = this.stillAnimation;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     var that = this;
-    setInterval(function() {
+    this.cryInterval = setInterval(function() {
         that.crying = !that.crying;
         if (that.crying) that.tuskenCry.play();
     }, 10000);
@@ -130,14 +140,25 @@ SandPerson.prototype.update = function() {
             // this.shooting = true;
             ent.removeFromWorld = true;
             this.health--;
+            var that = this;
+            var invisibleInterval = setInterval(function() {
+                that.invisible = !that.invisible;
+            }, 50);
+            setTimeout(function() {
+                clearInterval(invisibleInterval);
+                that.invisible = false;
+            }, 500);
             console.log("SandPerson was hit!");
         }
     }
 
-    if (this.health < 0) this.removeFromWorld = true;
+    if (this.health < 0) {
+        this.removeFromWorld = true;
+        clearInterval(this.cryInterval);
+    }
 
-    if (this.game.left && this.game.scrolling) this.x+=3 * 1;
-    if (this.game.right && this.game.scrolling) this.x-=3 * 1;
+    if (this.game.left && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
+    if (this.game.right && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
     Entity.prototype.update.call(this);
 }
 
@@ -147,11 +168,12 @@ SandPerson.prototype.draw = function (ctx) {
     } else {
         this.currentAnimation = this.stillAnimation;
     }
-    this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
+    ctx.globalAlpha = 1.0;
+    if (!this.invisible) this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
-    ctx.font="20px Georgia";
-    ctx.fillText("I'm a SandPerson!",this.x,this.y - this.height - 20);
+    // ctx.font="20px Georgia";
+    // ctx.fillText("I'm a SandPerson!",this.x,this.y - this.height - 20);
     Entity.prototype.draw.call(this);
 }
 

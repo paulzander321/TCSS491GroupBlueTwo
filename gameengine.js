@@ -45,6 +45,7 @@ GameEngine.prototype.init = function (ctx) {
     this.ctx = ctx;
     this.scrolling = false;
     this.playerCanMove = true;
+    this.scrollSpeed = 1.8;
     this.backgroundMusic = new Audio("./sound/megaman-music.mp3");
     this.backgroundMusic.loop = true;
     this.screenScrolling = false;
@@ -211,16 +212,4 @@ Entity.prototype.rotateAndCache = function (image, angle) {
     //offscreenCtx.strokeStyle = "red";
     //offscreenCtx.strokeRect(0,0,size,size);
     return offscreenCanvas;
-}
-
-Entity.prototype.collision = function(other) {
-    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
-                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
-                        || (this.x >= other.x && this.x + this.width <= other.x + other.width)
-                        || (other.x >= this.x && other.x + other.width <= this.x + this.width);
-    var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
-                        || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
-                        || (this.y - this.height >= other.y - other.height && this.y <= other.y)
-                        || (other.y <= this.y && other.y - other.height >= this.y - this.height);
-    return collisionX && collisionY;
 }
