@@ -14,6 +14,7 @@ function Background(game, x, y, width, height) {
     this.height = height;
     this.xOffset = 0; 
     this.yOffset = 0;
+    window.bgXOffset = this.xOffset;
     Entity.call(this, game, 0, 0);
 }
 
@@ -21,6 +22,14 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
+//<<<<<<< HEAD
+//    if (this.game.player && this.game.player.health > 0) {
+//        if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving && !window.bossLock) {
+//            this.xOffset += SCROLL_SPEED;
+//            this.game.scrolling = true;
+//        } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving && !window.bossLock) {
+//            this.xOffset -= SCROLL_SPEED;
+//=======
     if (this.xOffset > 3088) this.lockScroll = true;
     if (this.game.player && this.game.player.currentHealth > 0) {
         if (this.game.right && !this.game.left && !this.lockScroll && this.game.playerCanMove && !this.game.playerMoving) {
@@ -28,6 +37,7 @@ Background.prototype.update = function () {
             this.game.scrolling = true;
         } else if (this.game.left && !this.game.right && !this.lockScroll && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving) {
             this.xOffset-= this.game.scrollSpeed;
+//>>>>>>> refs/remotes/origin/master
             this.game.scrolling = true;
         } else {
             this.game.scrolling = false;
@@ -35,10 +45,15 @@ Background.prototype.update = function () {
     } else {
         this.game.scrolling = false;
     }
+    window.bgXOffset = this.xOffset;
+    if (this.xOffset >= 3088) {
+        var wally = new Platform(this.game, 3092, 188, 3107 - 3092, 188 - 140);
+        this.game.addEntity(wally);
+    }
 }
 
 Background.prototype.draw = function (ctx) {
-    //debugger;
+    
     ctx.drawImage(ASSET_MANAGER.getAsset("./img/stage.png"),
                   this.startX + this.xOffset, this.startY + this.yOffset,  // source from sheet
                   SPRITE_FRAME_WIDTH, SPRITE_FRAME_HEIGHT,
@@ -46,6 +61,7 @@ Background.prototype.draw = function (ctx) {
                   this.game.ctx.canvas.width,
                   this.game.ctx.canvas.height);
     Entity.prototype.draw.call(this);
+
 }
 
 function Platform(game, x, y, width, height) {
@@ -102,23 +118,6 @@ HealthBar.prototype.draw = function(ctx){
         this.game.ctx.lineTo(this.x + i * (this.width / this.game.player.maxHealth), this.y + this.height);
         this.game.ctx.stroke();
     }
-}
-
-//Essentially just a Platform but player will handle collision differently.
-//May just add an "isLadder" property to platform to replace this. 
-function Ladder(game, x, y, width, height) {
-    Platform.call(this, game, x, y, width, height);
-}
-
-Ladder.prototype = new Platform();
-Ladder.prototype.constructor = Ladder;
-
-Ladder.prototype.update = function () {
-    Platform.prototype.update.call(this);
-}
-
-Ladder.prototype.draw = function (ctx) {
-    Platform.prototype.draw.call(this);
 }
 
 function Spikes(game, x, y, width, height) {

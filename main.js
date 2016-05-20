@@ -1,17 +1,17 @@
 //"Main" Code Here
 
 var ASSET_MANAGER = new AssetManager();
-
+window.bossLock = false;
 ASSET_MANAGER.queueDownload("./img/MegaSheet.gif");
 ASSET_MANAGER.queueDownload("./img/explosion.png");
 ASSET_MANAGER.queueDownload("./img/jawas.png");
 ASSET_MANAGER.queueDownload("./img/stage.png");
 
 ASSET_MANAGER.downloadAll(function () {
-    console.log("Beginning 'Main' Code");
-
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
+
+   
 
     var gameEngine = new GameEngine();
     var bg = new Background(gameEngine, 0, 0, ctx.width, ctx.height);
@@ -99,26 +99,24 @@ ASSET_MANAGER.downloadAll(function () {
     var p46 = new Platform(gameEngine, 3331, 230, 3346 - 3331, 230 - 0);
 
     var hBar = new HealthBar(gameEngine, 10, 10, 200, 30);
-    
-    var spikesTest = new Spikes(gameEngine, 695, 140, 31, 17);
-    var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 21);
-    var spikes3 = new Spikes(gameEngine, 1238, 189, 33, 18);
-    var spikes4 = new Spikes(gameEngine, 1463, 191, 65, 23);
-    // var ladder = new Ladder(gameEngine, 856, 205, 16, 46);
+    var spikes1 = new Spikes(gameEngine, 694, 139, 725 - 694, 139 - 125);
+    var spikes2 = new Spikes(gameEngine, 1141, 224, 1174 - 1141, 224 - 206);
+    var spikes3 = new Spikes(gameEngine, 1238, 190, 1271 - 1238, 190 - 174);
+    var spikes4 = new Spikes(gameEngine, 1463, 190, 1528 - 1463, 190 - 174);
+
     // var sp = new SandPerson(gameEngine, 215 * 3, 158 * 3);
     var jawa = new Jawa(gameEngine, 1625, 158, p2);
     var jawa2 = new Jawa(gameEngine, 632, 110);
     var jawa3 = new Jawa(gameEngine, 3056, 187);
     // var jawa4 = new Jawa(gameEngine, 3246, 187);
-    var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
+    //var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
 
     gameEngine.addEntity(bg);
     gameEngine.addEntity(spikes2);
     gameEngine.addEntity(spikes3);
     gameEngine.addEntity(spikes4);
+
     gameEngine.addEntity(jawa3);
-    gameEngine.addEntity(powerup);
-    // gameEngine.addEntity(ladder);
 
     //Add floor platforms
     gameEngine.addEntity(p);
@@ -168,15 +166,18 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(p45);
     gameEngine.addEntity(p46);
 
-    gameEngine.addEntity(hBar);
-
-    // gameEngine.addEntity(sp);
-    gameEngine.addEntity(spikesTest);
+    gameEngine.addEntity(spikes1);
     gameEngine.addEntity(gameEngine.player);
     gameEngine.addEntity(jawa);
     gameEngine.addEntity(jawa2);
 
-    //Add ceiling platforms
+    gameEngine.addEntity(hBar);
+
+    gameEngine.addEntity(gameEngine.player);
+    gameEngine.addEntity(jawa);
+    gameEngine.addEntity(jawa2);
+
+
     gameEngine.addEntity(r);
     gameEngine.addEntity(r1);
     gameEngine.addEntity(r2);
@@ -211,5 +212,4 @@ ASSET_MANAGER.downloadAll(function () {
 
     gameEngine.init(ctx);
     gameEngine.start();
-
 });

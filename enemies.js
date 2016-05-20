@@ -39,7 +39,6 @@ Jawa.prototype.update = function() {
                 ent.removeFromWorld = true;
                 this.health--;
                 this.utini.play();
-                console.log("Jawa was hit!");
                 var that = this;
                 var invisibleInterval = setInterval(function() {
                     that.invisible = !that.invisible;
@@ -154,7 +153,6 @@ Jawa.prototype.collision = function(other) {
 //             console.log("SandPerson was hit!");
 //         }
 //     }
-
 //     if (this.health < 0) {
 //         this.removeFromWorld = true;
 //         clearInterval(this.cryInterval);

@@ -20,7 +20,7 @@ Projectile.prototype.constructor = Projectile;
 Projectile.prototype.update = function() {
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
-        if ((ent instanceof Platform || ent instanceof Ladder || ent instanceof Spikes) && this.collision(ent)) {
+        if ((ent instanceof Platform || ent instanceof Spikes) && this.collision(ent)) {
             this.removeFromWorld = true;
         }
     }
