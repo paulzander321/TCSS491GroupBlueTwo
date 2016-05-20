@@ -15,10 +15,12 @@ function MegaMan(game, x, y, scaleBy) {
     this.invisible = false;
 
     //Sound stuff
-    this.deathSound = new Audio("./sound/atomic-bomb.mp3");
+    this.deathSound = new Audio("./sound/megaman-death.mp3");
+    this.deathSound.volume = 0.5;
     this.ouch = new Audio("./sound/ouch.mp3");
     this.scream = new Audio("./sound/willhelm.mp3");
     this.deathSoundStarted = false;
+    this.rapidFireUnlock = new Audio("./sound/rapidfire.mp3");
     
     //Move left/right animations
     this.runRightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 558, 1192, 46, 39, 0.08, 10, true, false);
@@ -52,7 +54,7 @@ function MegaMan(game, x, y, scaleBy) {
     this.fallLeftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 346, 794, 32, 50, .15, 1, true, false);
     this.fallAndShootRightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 346, 346, 40, 51, .1, 1, true, false);
     this.fallAndShootLeftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 1024, 85, 40, 50, .1, 1, true, false);
-    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 4, 1254, 55, 74, 0.1, 8, false, true);
+    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 4, 1254, 55, 74, 0.08, 8, false, true);
 
     this.currentAnimation = this.stillAnimation;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
@@ -82,7 +84,6 @@ MegaMan.prototype.update = function() {
         if (!this.deathSoundStarted) {
             this.deathSoundStarted = true;
             this.deathSound.play();
-            this.scream.play();
         }
     }
 
@@ -116,7 +117,7 @@ MegaMan.prototype.update = function() {
     //Mega Man is colliding with.
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
-        if (this != ent && this.collision(ent) && (ent instanceof Shovel || (ent instanceof Projectile && ent.orig != this))) {
+        if (ent instanceof Projectile && ent.orig != this && this.collision(ent)) {
             this.takeDamage();
             ent.removeFromWorld = true;
         } else if (ent instanceof Ladder && this.collision(ent)) {
@@ -134,12 +135,27 @@ MegaMan.prototype.update = function() {
             } else if (this.x < ent.x + ent.width && this.x > ent.x) {
                 this.x = ent.x + ent.width;
             }
-        } else if (this != ent && ent instanceof Platform && this.collisionAbove(ent)) {
+        } else if (ent instanceof Platform && this.collisionAbove(ent)) {
             //If Megaman hits a platform from below and he is jumping, will make him start to fall
             this.jumping = false;
             this.jumpAnimation.elapsedTime = 0;
             this.falling = true;
             console.log("CollisionAbove!");
+        } else if (ent instanceof Powerup && this.collision(ent)) {
+            ent.removeFromWorld = true;
+            var that = this;
+            if (ent.type == "rapidfire") {
+                this.shootFrequency = 250;
+                this.rapidFireUnlock.play();
+                setTimeout(function() {
+                    that.shootFrequency = 500;
+                }, 8000);
+            } else if (ent.type == "speedup") {
+                this.game.scrollSpeed = 3.0;
+                setTimeout(function() {
+                    that.game.scrollSpeed = 2.0;
+                }, 8000);
+            }
         }
         if (ent instanceof Spikes && this.collision(ent)) {
             this.takeDamage();

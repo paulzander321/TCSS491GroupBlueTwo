@@ -135,3 +135,40 @@ Spikes.prototype.update = function () {
 Spikes.prototype.draw = function (ctx) {
     Platform.prototype.draw.call(this);
 }
+
+function Powerup(game, x, y, radius, type) {
+    this.x = (x - OFFSET_X) * SCALE; // Calculations to match up sprite dimensions with canvas dimensions
+    this.y = (y - OFFSET_Y) * SCALE;
+    this.radius = radius
+    this.type = type;
+    this.width = this.radius * 2;
+    this.height = this.radius * 2;
+    this.started = false;
+    Entity.call(this, game, this.x, this.y);
+}
+
+Powerup.prototype = new Entity();
+Powerup.prototype.constructor = Powerup;
+
+Powerup.prototype.update = function() {
+    if (this.x > 0 && this.x < this.game.surfaceWidth) this.started = true;
+    if (this.started) {
+        this.x -= 3;
+        this.y += Math.floor(Math.random() * 7) - 3;
+        if (this.x < 0) this.removeFromWorld = true;
+        Entity.prototype.update.call(this);
+    }
+    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=SCALE * this.game.scrollSpeed;
+    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=SCALE * this.game.scrollSpeed;
+    if (this.game.up && !this.game.right && !this.game.left && this.game.scrolling) this.y+=SCALE * this.game.scrollSpeed;
+    if (this.game.down && !this.game.right && !this.game.left && this.game.scrolling) this.y-=SCALE * this.game.scrollSpeed;
+}
+
+Powerup.prototype.draw = function(ctx) {
+    ctx.beginPath();
+    ctx.fillStyle = "purple";
+    ctx.arc(this.x + this.radius, this.y - this.radius, this.radius, 0, Math.PI * 2, false);
+    ctx.fill();
+    ctx.closePath();
+    Entity.prototype.draw.call(this);
+}

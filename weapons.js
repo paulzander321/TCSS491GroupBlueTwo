@@ -25,8 +25,8 @@ Projectile.prototype.update = function() {
         }
     }
     if (this.x < 0) this.removeFromWorld = true;
-    this.x += this.dx;
-    this.y += this.dy;
+    this.x += this.dx * this.game.scrollSpeed;
+    this.y += this.dy * this.game.scrollSpeed;
     if (this.game.left && !this.game.right && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
     if (this.game.right && !this.game.left && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
     Entity.prototype.update.call(this);
@@ -88,16 +88,4 @@ Shovel.prototype.update = function() {
 Shovel.prototype.draw = function(ctx) {
     this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     Entity.prototype.draw.call(this);
-}
-
-function Powerup(game, x, y) {
-    this.
-    Entity.call(this, this.game, x, y);
-}
-
-Powerup.prototype = new Entity();
-Powerup.prototype.constructor = Powerup;
-
-Powerup.prototype.draw = function(ctx) {
-
 }

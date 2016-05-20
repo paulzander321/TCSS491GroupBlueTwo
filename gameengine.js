@@ -46,8 +46,10 @@ GameEngine.prototype.init = function (ctx) {
     this.ctx = ctx;
     this.scrolling = false;
     this.playerCanMove = true;
-    this.scrollSpeed = 1.8;
+    this.scrollSpeed = 2.0;
     this.backgroundMusic = new Audio("./sound/megaman-music.mp3");
+    this.backgroundMusic.volume = 0.3;
+    this.gameOverSound = new Audio("./sound/gameover.wav");
     this.backgroundMusic.loop = true;
     this.screenScrolling = false;
     this.surfaceWidth = this.ctx.canvas.width;
@@ -158,6 +160,7 @@ GameEngine.prototype.draw = function () {
         var that = this;
         var setGameOver = setTimeout(function() {
             that.gameOver = true;
+            that.gameOverSound.play();
         }, 1500);
     }
     if (this.gameOver) {
