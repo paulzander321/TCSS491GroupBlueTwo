@@ -66,8 +66,8 @@ ASSET_MANAGER.downloadAll(function () {
     var p13 = new Platform(gameEngine, 1046, 230, 1111 - 1046, 230 - 190);
     var p14 = new Platform(gameEngine, 1111, 230, 1206 - 1111, 230 - 206);
     var p15 = new Platform(gameEngine, 1206, 230, 1302 - 1206, 230 - 174);
-    var p16 = new Platform(gameEngine, 1302, 230, 1335 - 1302, 230 - 158);
-    var p17 = new Platform(gameEngine, 1334, 189, 1366 - 1334, 189 - 157);
+    var p16 = new Platform(gameEngine, 1302, 230, 1335 - 1302, 40);
+    var p17 = new Platform(gameEngine, 1302, 190, 65, 32); //Can't move onto this one
     var p18 = new Platform(gameEngine, 1335, 230, 1398 - 1335, 230 - 221);
     var p19 = new Platform(gameEngine, 1399, 230, 1430 - 1399, 230 - 190);
     var p20 = new Platform(gameEngine, 1431, 230, 1462 - 1431, 230 - 158);
@@ -98,13 +98,13 @@ ASSET_MANAGER.downloadAll(function () {
     var p45 = new Platform(gameEngine, 2739, 230, 3331 - 2739, 230 - 188); 
     var p46 = new Platform(gameEngine, 3331, 230, 3346 - 3331, 230 - 0);
 
-    var hBar = new HealthBar(gameEngine, 2, 7, 50, 5);
+    var hBar = new HealthBar(gameEngine, 10, 10, 200, 30);
     
     var spikesTest = new Spikes(gameEngine, 695, 140, 31, 17);
-    var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 17);
+    var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 21);
     var spikes3 = new Spikes(gameEngine, 1238, 189, 33, 18);
     // var ladder = new Ladder(gameEngine, 856, 205, 16, 46);
-    var sp = new SandPerson(gameEngine, 215 * 3, 158 * 3);
+    // var sp = new SandPerson(gameEngine, 215 * 3, 158 * 3);
     var jawa = new Jawa(gameEngine, 1625, 158, p2);
     var jawa2 = new Jawa(gameEngine, 632, 110);
     var jawa3 = new Jawa(gameEngine, 3056, 187);
@@ -166,7 +166,7 @@ ASSET_MANAGER.downloadAll(function () {
 
     gameEngine.addEntity(hBar);
 
-    gameEngine.addEntity(sp);
+    // gameEngine.addEntity(sp);
     gameEngine.addEntity(spikesTest);
     gameEngine.addEntity(gameEngine.player);
     gameEngine.addEntity(jawa);

@@ -115,18 +115,12 @@ function SandPerson(game, x, y) {
     this.health = 3;
     this.tuskenCry = new Audio("./sound/tusken_cry.mp3");
     this.tuskenCry.play();
-    this.crying = true;
     this.invisible = false;
     this.raiderAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 178, 196, 38, 70, .3, 2, true, false);
     this.stillAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 178, 196, 38, 70, .3, 1, true, false);
     this.currentAnimation = this.stillAnimation;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
-    var that = this;
-    this.cryInterval = setInterval(function() {
-        that.crying = !that.crying;
-        if (that.crying) that.tuskenCry.play();
-    }, 10000);
     Entity.call(this, game, x, y);
 }
 
@@ -140,6 +134,7 @@ SandPerson.prototype.update = function() {
             // this.shooting = true;
             ent.removeFromWorld = true;
             this.health--;
+            this.tuskenCry.play();
             var that = this;
             var invisibleInterval = setInterval(function() {
                 that.invisible = !that.invisible;
@@ -163,17 +158,10 @@ SandPerson.prototype.update = function() {
 }
 
 SandPerson.prototype.draw = function (ctx) {
-    if (this.crying && !this.tuskenCry.paused) {
-        this.currentAnimation = this.raiderAnimation;
-    } else {
-        this.currentAnimation = this.stillAnimation;
-    }
-    ctx.globalAlpha = 1.0;
+    this.currentAnimation = this.raiderAnimation;
     if (!this.invisible) this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
-    // ctx.font="20px Georgia";
-    // ctx.fillText("I'm a SandPerson!",this.x,this.y - this.height - 20);
     Entity.prototype.draw.call(this);
 }
 

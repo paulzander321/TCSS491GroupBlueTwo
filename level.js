@@ -6,11 +6,10 @@ var OFFSET_Y = 0; // Y offset from sprite background
 var SPRITE_FRAME_WIDTH = 258; //Width of sprite background frame
 var SPRITE_FRAME_HEIGHT = 230; //Height of sprite background frame
 
-var SCROLL_SPEED = 1; // Scroll speed of background (uses sprite dimensions) in pixels per update
-
 function Background(game, x, y, width, height) {
     this.startX = x;
     this.startY = y;
+    this.lockScroll = false;
     this.width = width;
     this.height = height;
     this.xOffset = 0; 
@@ -22,11 +21,12 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
+    if (this.xOffset > 3088) this.lockScroll = true;
     if (this.game.player && this.game.player.currentHealth > 0) {
-        if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving) {
+        if (this.game.right && !this.game.left && !this.lockScroll && this.game.playerCanMove && !this.game.playerMoving) {
             this.xOffset+= this.game.scrollSpeed;
             this.game.scrolling = true;
-        } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving) {
+        } else if (this.game.left && !this.game.right && !this.lockScroll && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving) {
             this.xOffset-= this.game.scrollSpeed;
             this.game.scrolling = true;
         } else {
@@ -46,27 +46,6 @@ Background.prototype.draw = function (ctx) {
                   this.game.ctx.canvas.width,
                   this.game.ctx.canvas.height);
     Entity.prototype.draw.call(this);
-}
-
-function HealthBar(game, x, y, width, height){
-    this.game = game;
-    this.x = (x - OFFSET_X) * SCALE; // Calculations to match up sprite dimensions with canvas dimensions
-    this.y = (y - OFFSET_Y) * SCALE;
-    this.width = width * SCALE;
-    this.height = height * SCALE;
-}
-
-HealthBar.prototype = new Entity();
-HealthBar.prototype.constructor = HealthBar;
-
-HealthBar.prototype.update = function() {
-    this.width = this.game.player.currentHealth * 20;
-    Entity.prototype.fill.call(this);
-}
-
-HealthBar.prototype.draw = function(ctx){
-    Entity.prototype.hdraw.call(this);
-    Entity.prototype.fill.call(this);
 }
 
 function Platform(game, x, y, width, height) {
@@ -91,6 +70,38 @@ Platform.prototype.update = function() {
 //Draw red box around the platform for debugging
 Platform.prototype.draw = function(ctx) {
     Entity.prototype.draw.call(this);
+}
+
+function HealthBar(game, x, y, width, height) {
+    this.width = width;
+    this.height = height;
+    this.lineWidth = 3;
+    Entity.call(this, game, x, y);
+}
+
+HealthBar.prototype = new Entity();
+HealthBar.prototype.constructor = HealthBar;
+
+HealthBar.prototype.update = function() {
+}
+
+HealthBar.prototype.draw = function(ctx){
+    this.game.ctx.fillStyle = "gray";
+    this.game.ctx.fillRect(this.x, this.y, this.width, this.height);
+    if (this.game.player.currentHealth > 0) {
+        this.game.player.currentHealth < this.game.player.maxHealth / 3 ? this.game.ctx.fillStyle = "red"
+            : this.game.ctx.fillStyle = "green";
+        this.game.ctx.fillRect(this.x, this.y, this.width / this.game.player.maxHealth * this.game.player.currentHealth, this.height);
+    }
+    this.game.ctx.strokeStyle = "black";
+    this.game.ctx.lineWidth = this.lineWidth;
+    this.game.ctx.strokeRect(this.x, this.y, this.width, this.height);
+    for (var i = 0; i < this.game.player.maxHealth; i++) {
+        this.game.ctx.beginPath();
+        this.game.ctx.moveTo(this.x + i * (this.width / this.game.player.maxHealth), this.y);
+        this.game.ctx.lineTo(this.x + i * (this.width / this.game.player.maxHealth), this.y + this.height);
+        this.game.ctx.stroke();
+    }
 }
 
 //Essentially just a Platform but player will handle collision differently.

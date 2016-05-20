@@ -42,6 +42,7 @@ function GameEngine() {
 
 GameEngine.prototype.init = function (ctx) {
     this.gamepads = [];
+    this.gameOver = false;
     this.ctx = ctx;
     this.scrolling = false;
     this.playerCanMove = true;
@@ -106,6 +107,7 @@ GameEngine.prototype.startInput = function () {
             var tempMega = new MegaMan(that, Math.floor(Math.random() * 800), 300, 1.5);
             that.addEntity(tempMega);
             that.player = tempMega;
+            that.gameOver = false;
             that.playerCount++;
         }
 
@@ -141,7 +143,7 @@ GameEngine.prototype.startInput = function () {
 }
 
 GameEngine.prototype.addEntity = function (entity) {
-    console.log('added entity');
+    // console.log('added entity');
     this.entities.push(entity);
 }
 
@@ -150,6 +152,21 @@ GameEngine.prototype.draw = function () {
     this.ctx.save();
     for (var i = 0; i < this.entities.length; i++) {
         this.entities[i].draw(this.ctx);
+    }
+
+    if (this.player.currentHealth < 1 && !this.gameOver) {
+        var that = this;
+        var setGameOver = setTimeout(function() {
+            that.gameOver = true;
+        }, 1500);
+    }
+    if (this.gameOver) {
+        this.ctx.fillStyle = "black";
+        this.ctx.font="60px Georgia";
+        this.ctx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText("Game Over", this.surfaceWidth / 2, this.surfaceHeight / 2);
     }
     this.ctx.restore();
 }
@@ -195,22 +212,6 @@ Entity.prototype.draw = function (ctx) {
         this.game.ctx.lineWidth = 3;
         this.game.ctx.strokeRect(this.x, this.y - this.height, this.width, this.height);
     }
-}
-
-Entity.prototype.hdraw = function (ctx){
-    this.game.ctx.strokeStyle = 'black';
-    this.game.ctx.lineWidth = 2;
-    this.game.ctx.strokeRect(this.x, this.y - this.height, 100, this.height);
-
-}
-
-Entity.prototype.fill = function (ctx) {
-    if (this.game.player.currerntHealth < 3){
-        this.game.ctx.fillStyle = 'red';
-    }else{
-        this.game.ctx.fillStyle = 'green';
-    }
-    this.game.ctx.fillRect(this.x, this.y - this.height, this.width, this.height);
 }
 
 Entity.prototype.rotateAndCache = function (image, angle) {
