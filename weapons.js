@@ -20,15 +20,15 @@ Projectile.prototype.constructor = Projectile;
 Projectile.prototype.update = function() {
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
-        if ((ent instanceof Platform || ent instanceof Ladder || ent instanceof Spikes) && this.collision(ent)) {
+        if ((ent instanceof Platform || ent instanceof Spikes) && this.collision(ent)) {
             this.removeFromWorld = true;
         }
     }
-
-    this.x += this.dx;
-    this.y += this.dy;
-    if (this.game.left && this.game.scrolling) this.x+=3 * 1;
-    if (this.game.right && this.game.scrolling) this.x-=3 * 1;
+    if (this.x < 0) this.removeFromWorld = true;
+    this.x += this.dx * this.game.scrollSpeed;
+    this.y += this.dy * this.game.scrollSpeed;
+    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
+    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
     Entity.prototype.update.call(this);
 }
 

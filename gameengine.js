@@ -42,10 +42,14 @@ function GameEngine() {
 
 GameEngine.prototype.init = function (ctx) {
     this.gamepads = [];
+    this.gameOver = false;
     this.ctx = ctx;
     this.scrolling = false;
     this.playerCanMove = true;
+    this.scrollSpeed = 2.0;
     this.backgroundMusic = new Audio("./sound/megaman-music.mp3");
+    this.backgroundMusic.volume = 0.3;
+    this.gameOverSound = new Audio("./sound/gameover.wav");
     this.backgroundMusic.loop = true;
     this.screenScrolling = false;
     this.surfaceWidth = this.ctx.canvas.width;
@@ -102,6 +106,7 @@ GameEngine.prototype.startInput = function () {
             var tempMega = new MegaMan(that, Math.floor(Math.random() * 800), 300, 1.5);
             that.addEntity(tempMega);
             that.player = tempMega;
+            that.gameOver = false;
             that.playerCount++;
         }
 
@@ -143,6 +148,22 @@ GameEngine.prototype.draw = function () {
     this.ctx.save();
     for (var i = 0; i < this.entities.length; i++) {
         this.entities[i].draw(this.ctx);
+    }
+
+    if (this.player.currentHealth < 1 && !this.gameOver) {
+        var that = this;
+        var setGameOver = setTimeout(function() {
+            that.gameOver = true;
+            that.gameOverSound.play();
+        }, 1500);
+    }
+    if (this.gameOver) {
+        this.ctx.fillStyle = "black";
+        this.ctx.font="60px Georgia";
+        this.ctx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText("Game Over", this.surfaceWidth / 2, this.surfaceHeight / 2);
     }
     this.ctx.restore();
 }
@@ -205,16 +226,4 @@ Entity.prototype.rotateAndCache = function (image, angle) {
   //  offscreenCtx.strokeStyle = "red";
   //  offscreenCtx.strokeRect(0,0,size,size);
     return offscreenCanvas;
-}
-
-Entity.prototype.collision = function(other) {
-    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
-                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
-                        || (this.x >= other.x && this.x + this.width <= other.x + other.width)
-                        || (other.x >= this.x && other.x + other.width <= this.x + this.width);
-    var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
-                        || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
-                        || (this.y - this.height >= other.y - other.height && this.y <= other.y)
-                        || (other.y <= this.y && other.y - other.height >= this.y - this.height);
-    return collisionX && collisionY;
 }
