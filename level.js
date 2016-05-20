@@ -15,6 +15,7 @@ function Background(game, x, y, width, height) {
     this.height = height;
     this.xOffset = 0; 
     this.yOffset = 0;
+    window.bgXOffset = this.xOffset;
     Entity.call(this, game, 0, 0);
 }
 
@@ -23,11 +24,11 @@ Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
     if (this.game.player && this.game.player.health > 0) {
-        if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving) {
-            this.xOffset+= SCROLL_SPEED;
+        if (this.game.right && !this.game.left && (this.xOffset < 3088) && this.game.playerCanMove && !this.game.playerMoving && !window.bossLock) {
+            this.xOffset += SCROLL_SPEED;
             this.game.scrolling = true;
-        } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving) {
-            this.xOffset-= SCROLL_SPEED;
+        } else if (this.game.left && !this.game.right && this.xOffset > 0 && this.game.playerCanMove && !this.game.playerMoving && !window.bossLock) {
+            this.xOffset -= SCROLL_SPEED;
             this.game.scrolling = true;
         } else {
             this.game.scrolling = false;
@@ -35,10 +36,15 @@ Background.prototype.update = function () {
     } else {
         this.game.scrolling = false;
     }
+    window.bgXOffset = this.xOffset;
+    if (this.xOffset >= 3088) {
+        var wally = new Platform(this.game, 3092, 188, 3107 - 3092, 188 - 140);
+        this.game.addEntity(wally);
+    }
 }
 
 Background.prototype.draw = function (ctx) {
-    //debugger;
+    
     ctx.drawImage(ASSET_MANAGER.getAsset("./img/stage.png"),
                   this.startX + this.xOffset, this.startY + this.yOffset,  // source from sheet
                   SPRITE_FRAME_WIDTH, SPRITE_FRAME_HEIGHT,
@@ -46,6 +52,7 @@ Background.prototype.draw = function (ctx) {
                   this.game.ctx.canvas.width,
                   this.game.ctx.canvas.height);
     Entity.prototype.draw.call(this);
+
 }
 
 function Platform(game, x, y, width, height) {
@@ -103,3 +110,22 @@ Spikes.prototype.update = function () {
 Spikes.prototype.draw = function (ctx) {
     Platform.prototype.draw.call(this);
 }
+
+//function SlideWall(game, x, y, width, height) {
+//    this.game = game;
+//    this.x = (x - OFFSET_X); // Calculations to match up sprite dimensions with canvas dimensions
+//    this.y = (y - OFFSET_Y);
+//    this.width = width * SCALE;
+//    this.height = height * SCALE;
+//}
+
+//SlideWall.prototype = new Entity();
+//SlideWall.prototype.constructor = SlideWall;
+
+//SlideWall.prototype.update = function () {
+//    Entity.prototype.update.call(this);
+//}
+
+//SlideWall.prototype.draw = function (ctx) {
+//    Entity.prototype.draw.call(this, ctx);
+//}

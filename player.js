@@ -66,7 +66,6 @@ MegaMan.prototype = new Entity();
 MegaMan.prototype.constructor = MegaMan;
 
 MegaMan.prototype.update = function() {
-
     this.game.playerMoving = this.x < this.game.surfaceWidth / 2 - this.width || this.x > this.game.surfaceWidth / 2 + this.width;
 
     //Mega Man will die when health below 1
@@ -82,7 +81,6 @@ MegaMan.prototype.update = function() {
     //Once death animation done Mega Man removed from world.
     if (this.dying && this.explosionAnimation.isDone()) {
         this.removeFromWorld = true;
-        console.log("Megaman has fallen...");
         this.game.playerCount--;
     }
 
@@ -115,7 +113,6 @@ MegaMan.prototype.update = function() {
         } else if (ent instanceof Ladder && this.collision(ent)) {
             this.ladder = ent;
             this.falling = false;
-            console.log("Near ladder!");
         } else if (ent instanceof Platform && this.collision(ent) && !this.collisionAbove(ent)) {
             this.falling = false;
             this.platform = ent;
@@ -131,17 +128,19 @@ MegaMan.prototype.update = function() {
             this.jumping = false;
             this.jumpAnimation.elapsedTime = 0;
             this.falling = true;
-            console.log("CollisionAbove!");
         }
     }
 
     //Things Mega Man can do when alive
     if (!this.dying) {
-
-        //When the game can't scroll anymore, Megaman will now be able to move 
+        window.bossLock = window.bgXOffset >= 3088;
+        if (window.bossLock) {
+            this.game.scrolling = false;
+            this.game.screenScrolling = false;
+        }
         if (!this.game.scrolling && !this.game.screenScrolling && this.game.right && !this.game.left && this.x + this.width < 3330) this.x += 3;
         if (!this.game.scrolling && !this.game.screenScrolling && this.game.left && !this.game.right && this.x > 0) this.x -= 3;
-        if (this.x > 350 && this.x < 450) this.game.screenScrolling = true;
+        if (this.x > 350 && this.x < 450 && !window.bossLock) this.game.screenScrolling = true;
         if (!this.game.scrolling) this.game.screenScrolling = false;
 
         //Shooting code
@@ -187,52 +186,198 @@ MegaMan.prototype.update = function() {
 MegaMan.prototype.draw = function (ctx) {
     if (this.dying) {
         this.currentAnimation = this.explosionAnimation;
-    } else if (this.jumping) {
+    } 
+    else if (this.jumping) {
         this.currentAnimation = this.jumpAnimation;
-    } else if (this.falling && this.facingRight && !this.game.shooting) {
+    } 
+    else if (this.falling && this.facingRight && !this.game.shooting) {
         this.currentAnimation = this.fallRightAnimation;
-    } else if (this.falling && !this.facingRight && !this.game.shooting) {
+    } 
+    else if (this.falling && !this.facingRight && !this.game.shooting) {
         this.currentAnimation = this.fallLeftAnimation;
-    } else if (this.game.right && this.game.down && !this.game.left) {
+    } 
+    else if (this.game.right && this.game.down && !this.game.left) {
         this.currentAnimation = this.rollRightAnimation;
-    } else if (this.game.left && this.game.down && !this.game.right) {
+    } 
+    else if (this.game.left && this.game.down && !this.game.right) {
         this.currentAnimation = this.rollLeftAnimation;
-    } else if ((this.falling || this.jumping) && this.game.shooting && this.facingRight) {
+    } 
+    else if ((this.falling || this.jumping) && this.game.shooting && this.facingRight) {
         this.currentAnimation = this.fallAndShootRightAnimation;
-    } else if ((this.falling || this.jumping) && this.game.shooting && !this.facingRight) {
+    } 
+    else if ((this.falling || this.jumping) && this.game.shooting && !this.facingRight) {
         this.currentAnimation = this.fallAndShootLeftAnimation;
-    } else if (this.game.right && !this.game.left && this.game.shooting) {
+    } 
+    else if (this.game.right && !this.game.left && this.game.shooting) {
         this.currentAnimation = this.runRightAndShootAnimation;
-    } else if (this.game.left && !this.game.right && this.game.shooting) {
+    } 
+    else if (this.game.left && !this.game.right && this.game.shooting) {
         this.currentAnimation = this.runLeftAndShootAnimation;
-    } else if (this.game.shooting && this.facingRight) {
+    } 
+    else if (this.game.shooting && this.facingRight) {
         this.currentAnimation = this.shootRightAnimation;
-    } else if (this.game.shooting && !this.facingRight) {
+    } 
+    else if (this.game.shooting && !this.facingRight) {
         this.currentAnimation = this.shootLeftAnimation;
-    } else if ((this.game.up || this.game.down || this.game.right || this.game.left) && this.ladder && this.collision(this.ladder)) {
+    } 
+    else if ((this.game.up || this.game.down || this.game.right || this.game.left) && this.ladder && this.collision(this.ladder)) {
         this.currentAnimation = this.climbAnimation;
-    } else if (this.ladder && this.collision(this.ladder) && !this.game.up) {
+    } 
+    else if (this.ladder && this.collision(this.ladder) && !this.game.up) {
         this.currentAnimation = this.stillClimbAnimation;
-    } else if (this.game.down && this.facingRight) {
+    } 
+    else if (this.game.down && this.facingRight) {
         this.currentAnimation = this.crouchAnimation;
-    } else if (this.game.down && !this.facingRight) {
+    } 
+    else if (this.game.down && !this.facingRight) {
         this.currentAnimation = this.crouchLeftAnimation;
-    } else if (this.game.right && !this.game.left) {
+    } 
+    else if (this.game.right && !this.game.left) {
         this.currentAnimation = this.runRightAnimation;
-    } else if (this.game.left && !this.game.right) {
+    } 
+    else if (this.game.left && !this.game.right) {
         this.currentAnimation = this.runLeftAnimation;
-    } else if (this.game.punching) {
+    } 
+    else if (this.game.punching) {
         this.currentAnimation = this.punchAnimation;
-    } else if (this.facingRight) {
+    } 
+    else if (this.facingRight) {
         this.currentAnimation = this.stillAnimation;
-    } else {
+    } 
+    else {
         this.currentAnimation = this.faceLeftAnimation;
     }
 
+
+
+
+    /////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////// CHANGE THIS FOR THE BOX FOR ANIMATION
+    /////////////////////////////////////////////////////
+
     this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
-    this.width = this.currentAnimation.frameWidth * this.scaleBy;
-    this.height = this.currentAnimation.frameHeight * this.scaleBy;
-    Entity.prototype.draw.call(this);
+    //this.width = this.currentAnimation.frameWidth * this.scaleBy - 15;
+    //this.height = this.currentAnimation.frameHeight * this.scaleBy;
+    //Entity.prototype.draw.call(this);
+
+    //JUMP ANIMATION
+    if (this.currentAnimation == this.jumpAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy - 24;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy -10;
+        Entity.prototype.draw.call(this);
+    }
+    //ROLL RIGHT
+    else if (this.currentAnimation == this.rollRightAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //ROLL LEFT
+    else if (this.currentAnimation == this.rollLeftAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //CROUCH ANIMATION RIGHT
+    else if (this.currentAnimation == this.crouchAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //CROUCH ANIMATION LEFT
+    else if (this.currentAnimation == this.crouchLeftAnimation) 
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //FALL LEFT
+    else if (this.currentAnimation == this.fallLeftAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy - 8;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //FALL RIGHT
+    else if (this.currentAnimation == this.fallRightAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy - 8;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //RUN RIGHT
+    else if (this.currentAnimation == this.runRightAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy - 15;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //RUN LEFT
+    else if (this. currentAnimation == this.runLeftAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy - 10;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //STAND RIGHT
+    else if (this.currentAnimation == this.stillAnimation) {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //STAND LEFT
+    else if (this.currentAnimation == this.faceLeftAnimation) {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //STAND Left AND SHOOT
+    else if (this.currentAnimation == this.shootLeftAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //STAND Right AND SHOOT
+    else if (this.currentAnimation == this.shootRightAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //fallAndShootRightAnimation
+    else if (this.currentAnimation == this.fallAndShootRightAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //fallAndShootLeftAnimation
+    else if (this.currentAnimation == this.fallAndShootLeftAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    //runRightAndShootAnimation
+    else if (this.currentAnimation == this.runRightAndShootAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+    else if (this.currentAnimation == this.runLeftAndShootAnimation)
+    {
+        this.width = this.currentAnimation.frameWidth * this.scaleBy;
+        this.height = this.currentAnimation.frameHeight * this.scaleBy;
+        Entity.prototype.draw.call(this);
+    }
+   
+    
 }
 
 //Checks to see if Mega Man is colliding with another object based on width, height, and x, y coordinates.
@@ -255,7 +400,6 @@ MegaMan.prototype.collisionAbove = function(other) {
                         || (this.x >= other.x && this.x + this.width <= other.x + other.width)
                         || (other.x >= this.x && other.x + other.width <= this.x + this.width);
     var collisionY = (this.y - this.height >= other.y - other.height && this.y - this.height <= other.y);
-    if (collisionY && collisionX) console.log("Collision Above!!!");
     return collisionX && collisionY;
 }
 
@@ -266,7 +410,6 @@ MegaMan.prototype.collisionSide = function(other) {
                         || (other.y <= this.y && other.y - other.height >= this.y - this.height);
     var collisionX = (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width
                         || (this.x <= other.x + other.width && this.x > other.x));
-    if (collisionY && collisionX) console.log("Collision Right");
     return collisionX && collisionY;
 }
 
@@ -280,5 +423,4 @@ MegaMan.prototype.takeDamage = function() {
         }, 1000);
     }
     this.ouch.play();
-    console.log("MegaMan has been hit! His health is at " + this.health);
 }

@@ -52,11 +52,9 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceHeight = this.ctx.canvas.height;
     this.startInput();
     this.timer = new Timer();
-    console.log('Game Engine Started');
 }
 
 GameEngine.prototype.start = function () {
-    console.log("Starting play");
     var that = this;
     (function gameLoop() {
         that.loop();
@@ -65,7 +63,6 @@ GameEngine.prototype.start = function () {
 }
 
 GameEngine.prototype.startInput = function () {
-    console.log('Starting input');
     var that = this;
 
     this.ctx.canvas.addEventListener("keyup", function (e) {
@@ -135,12 +132,9 @@ GameEngine.prototype.startInput = function () {
             that.punching = true;
         }
     }, false);
-
-    console.log('Input started');
 }
 
 GameEngine.prototype.addEntity = function (entity) {
-    console.log('added entity');
     this.entities.push(entity);
 }
 
@@ -208,8 +202,8 @@ Entity.prototype.rotateAndCache = function (image, angle) {
     offscreenCtx.translate(0, 0);
     offscreenCtx.drawImage(image, -(image.width / 2), -(image.height / 2));
     offscreenCtx.restore();
-    //offscreenCtx.strokeStyle = "red";
-    //offscreenCtx.strokeRect(0,0,size,size);
+  //  offscreenCtx.strokeStyle = "red";
+  //  offscreenCtx.strokeRect(0,0,size,size);
     return offscreenCanvas;
 }
 

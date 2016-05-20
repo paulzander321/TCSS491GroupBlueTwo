@@ -37,7 +37,6 @@ Jawa.prototype.update = function() {
                 ent.removeFromWorld = true;
                 this.health--;
                 this.utini.play();
-                console.log("Jawa was hit!");
             } else if (ent instanceof Platform && this.collision(ent)) {
                 this.platform = ent;
             }
@@ -130,7 +129,6 @@ SandPerson.prototype.update = function() {
             // this.shooting = true;
             ent.removeFromWorld = true;
             this.health--;
-            console.log("SandPerson was hit!");
         }
     }
 
