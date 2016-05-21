@@ -121,7 +121,11 @@ MegaMan.prototype.update = function() {
     //Mega Man is colliding with.
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
-        if (ent instanceof Projectile && ent.orig != this && this.collision(ent)) {
+        if (ent instanceof Boss && this.collision(ent)) {
+            this.takeDamage();
+        }
+
+        if ((ent instanceof Projectile || ent instanceof FireBall) && ent.orig != this && this.collision(ent)) {
             this.takeDamage();
             ent.removeFromWorld = true;
         } else if (ent instanceof Ladder && this.collision(ent)) {

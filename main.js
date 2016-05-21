@@ -6,6 +6,11 @@ ASSET_MANAGER.queueDownload("./img/MegaSheet.gif");
 ASSET_MANAGER.queueDownload("./img/explosion.png");
 ASSET_MANAGER.queueDownload("./img/jawas.png");
 ASSET_MANAGER.queueDownload("./img/stage.png");
+ASSET_MANAGER.queueDownload("./img/fBirdStill.gif");
+ASSET_MANAGER.queueDownload("./img/fBirdShootLeft.gif");
+ASSET_MANAGER.queueDownload("./img/fBirdLeft.gif");
+ASSET_MANAGER.queueDownload("./img/fireball.gif");
+ASSET_MANAGER.queueDownload("./img/fBirdShot2Left.gif");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Beginning 'Main' Code");
@@ -110,6 +115,7 @@ ASSET_MANAGER.downloadAll(function () {
     // var jawa4 = new Jawa(gameEngine, 3246, 187);
     var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
     var powerup2 = new Powerup(gameEngine, 3220, 175, 15, "rapidfire");
+    var boss = new Boss(gameEngine, 3265, 180, p2);
 
     gameEngine.addEntity(gameEngine.background);
     gameEngine.addEntity(spikes2);
@@ -118,6 +124,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(jawa3);
     gameEngine.addEntity(powerup);
     // gameEngine.addEntity(ladder);
+    gameEngine.addEntity(boss);
 
     //Add floor platforms
     gameEngine.addEntity(pBugFix);
