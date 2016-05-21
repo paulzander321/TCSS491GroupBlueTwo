@@ -14,9 +14,8 @@ ASSET_MANAGER.downloadAll(function () {
     var ctx = canvas.getContext('2d');
 
     var gameEngine = new GameEngine();
-    var bg = new Background(gameEngine, 0, 0, ctx.width, ctx.height);
+    gameEngine.background = new Background(gameEngine, 0, 0, ctx.width, ctx.height);
     gameEngine.player = new MegaMan(gameEngine, 400, 500, 1.5, true);
-
 
     var r = new Platform(gameEngine, 631, 16, 722 - 631, 16);
     var r1 = new Platform(gameEngine, 726, 30, 759 - 726, 30);
@@ -58,8 +57,7 @@ ASSET_MANAGER.downloadAll(function () {
     var p5 = new Platform(gameEngine, 662, 230, 63, 103);
     var p6 = new Platform(gameEngine, 726, 230, 32, 88);
     var p7 = new Platform(gameEngine, 758, 230, 775 - 758, 55);
-    var p8 = new Platform(gameEngine, 775, 230, 80, 39);
-    var p9 = new Platform(gameEngine, 854, 230, 66, 23);
+    var p8 = new Platform(gameEngine, 775, 230, 145, 24);
     var p10 = new Platform(gameEngine, 807, 156, 144, 15);
     var p11 = new Platform(gameEngine, 855, 141, 64, 15);
     var p12 = new Platform(gameEngine, 920, 230, 1046 - 920, 230 - 158);
@@ -74,12 +72,12 @@ ASSET_MANAGER.downloadAll(function () {
     var p21 = new Platform(gameEngine, 1463, 230, 1559 - 1463, 230 - 174);
     var p22 = new Platform(gameEngine, 1560, 230, 1685 - 1560, 230 - 158);
     var p23 = new Platform(gameEngine, 1686, 230, 1717 - 1686, 230 - 171);
-    var p24 = new Platform(gameEngine, 1717, 230, 1799 - 1717, 230 - 189);
-    var p25 = new Platform(gameEngine, 1800, 230, 1847 - 1800, 230 - 204);
+    var p24 = new Platform(gameEngine, 1717, 230, 130, 26);
     var p26 = new Platform(gameEngine, 1752, 156, 1784 - 1752, 156 - 140);
     var p27 = new Platform(gameEngine, 1783, 156, 1816 - 1783, 156 - 124);
-    var p28 = new Platform(gameEngine, 1815, 156, 1878 - 1815, 156 - 109);
+    var p28 = new Platform(gameEngine, 1815, 154, 1878 - 1815, 156 - 110);
     var p29 = new Platform(gameEngine, 1847, 230, 1975 - 1847, 230 - 156);
+    var pBugFix = new Platform(gameEngine, 1847, 230, 31, 110);
     var p30 = new Platform(gameEngine, 1975, 230, 2006 - 1975, 230 - 173);
     var p31 = new Platform(gameEngine, 2007, 230, 2038 - 2007, 230 - 189);
     var p32 = new Platform(gameEngine, 2038, 230, 2104 - 2038, 230 - 204);
@@ -111,8 +109,9 @@ ASSET_MANAGER.downloadAll(function () {
     var jawa3 = new Jawa(gameEngine, 3056, 187);
     // var jawa4 = new Jawa(gameEngine, 3246, 187);
     var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
+    var powerup2 = new Powerup(gameEngine, 3220, 175, 15, "rapidfire");
 
-    gameEngine.addEntity(bg);
+    gameEngine.addEntity(gameEngine.background);
     gameEngine.addEntity(spikes2);
     gameEngine.addEntity(spikes3);
     gameEngine.addEntity(spikes4);
@@ -121,6 +120,7 @@ ASSET_MANAGER.downloadAll(function () {
     // gameEngine.addEntity(ladder);
 
     //Add floor platforms
+    gameEngine.addEntity(pBugFix);
     gameEngine.addEntity(p);
     gameEngine.addEntity(p2);
     gameEngine.addEntity(p3);
@@ -129,7 +129,6 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(p6);
     gameEngine.addEntity(p7);
     gameEngine.addEntity(p8);
-    gameEngine.addEntity(p9);
     gameEngine.addEntity(p10);
     gameEngine.addEntity(p11);
     gameEngine.addEntity(p12);
@@ -145,7 +144,6 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(p22);
     gameEngine.addEntity(p23);
     gameEngine.addEntity(p24);
-    gameEngine.addEntity(p25);
     gameEngine.addEntity(p26);
     gameEngine.addEntity(p27);
     gameEngine.addEntity(p28);

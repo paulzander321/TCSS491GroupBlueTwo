@@ -154,7 +154,7 @@ Powerup.prototype.update = function() {
     if (this.x > 0 && this.x < this.game.surfaceWidth) this.started = true;
     if (this.started) {
         this.x -= 3;
-        this.y += Math.floor(Math.random() * 7) - 3;
+        this.y += Math.floor(Math.random() * 21) - 10;
         if (this.x < 0) this.removeFromWorld = true;
         Entity.prototype.update.call(this);
     }

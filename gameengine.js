@@ -31,6 +31,7 @@ function GameEngine() {
     this.playerCount = 1;
     this.entities = [];
     this.showOutlines = true;
+    this.background = null;
     this.player = null;
     this.ctx = null;
     this.click = null;

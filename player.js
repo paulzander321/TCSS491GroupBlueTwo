@@ -67,6 +67,8 @@ MegaMan.prototype.constructor = MegaMan;
 
 MegaMan.prototype.update = function() {
 
+    // if (!this.game.playerCanMove) this.game.playerCanMove = true;
+
     if (this.platform && this.collision(this.platform) && this.y > this.platform.y - this.platform.height + 8) {
         // this.y = this.platform.y - this.platform.height;
         if (this.x + this.width >= this.platform.x && this.x + this.width <= this.platform.x + this.platform.width) {
@@ -74,9 +76,11 @@ MegaMan.prototype.update = function() {
         } else {
             this.x = this.platform.x + this.platform.width;
         }
+        // this.game.playerCanMove = false;
     }
 
-    this.game.playerMoving = this.x < this.game.surfaceWidth / 2 - this.width || this.x > this.game.surfaceWidth / 2 + this.width;
+    this.game.playerMoving = (this.x < this.game.surfaceWidth / 2 - this.width || this.x > this.game.surfaceWidth / 2 + this.width);
+                                //&& (this.game.background.xOffset == 0 || this.game.background.lockScroll);
 
     //Mega Man will die when health below 1
     if (this.currentHealth < 1) {
@@ -135,6 +139,7 @@ MegaMan.prototype.update = function() {
             } else if (this.x < ent.x + ent.width && this.x > ent.x) {
                 this.x = ent.x + ent.width;
             }
+            // this.game.playerCanMove = false;
         } else if (ent instanceof Platform && this.collisionAbove(ent)) {
             //If Megaman hits a platform from below and he is jumping, will make him start to fall
             this.jumping = false;
@@ -157,7 +162,7 @@ MegaMan.prototype.update = function() {
                 }, 8000);
             }
         }
-        if (ent instanceof Spikes && this.collision(ent)) {
+        if ((ent instanceof Spikes || ent instanceof Jawa) && this.collision(ent)) {
             this.takeDamage();
             this.jumping = true;
         }
@@ -167,8 +172,10 @@ MegaMan.prototype.update = function() {
     if (!this.dying) {
 
         //When the game can't scroll anymore, Megaman will now be able to move 
-        if (!this.game.scrolling && !this.game.screenScrolling && this.game.right && !this.game.left && this.x + this.width < 3330) this.x += this.game.scrollSpeed * 3;
-        if (!this.game.scrolling && !this.game.screenScrolling && this.game.left && !this.game.right && this.x > 0) this.x -= this.game.scrollSpeed * 3;
+        if (!this.game.scrolling && !this.game.screenScrolling && this.game.right 
+            && !this.game.left && this.x + this.width < 3330 /*&& this.game.playerCanMove*/) this.x += this.game.scrollSpeed * 3;
+        if (!this.game.scrolling && !this.game.screenScrolling && this.game.left 
+            && !this.game.right && this.x > 0 /*&& this.game.playerCanMove*/) this.x -= this.game.scrollSpeed * 3;
         if (this.x > 350 && this.x < 450) this.game.screenScrolling = true;
         if (!this.game.scrolling) this.game.screenScrolling = false;
 
