@@ -11,6 +11,10 @@ ASSET_MANAGER.queueDownload("./img/fBirdShootLeft.gif");
 ASSET_MANAGER.queueDownload("./img/fBirdLeft.gif");
 ASSET_MANAGER.queueDownload("./img/fireball.gif");
 ASSET_MANAGER.queueDownload("./img/fBirdShot2Left.gif");
+ASSET_MANAGER.queueDownload("./img/gundam.png");
+ASSET_MANAGER.queueDownload("./img/gundamReverse.png");
+ASSET_MANAGER.queueDownload("./img/dead_robot_flip.png");
+ASSET_MANAGER.queueDownload("./img/dead_robot.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Beginning 'Main' Code");
@@ -102,7 +106,8 @@ ASSET_MANAGER.downloadAll(function () {
     var p46 = new Platform(gameEngine, 3331, 230, 3346 - 3331, 230 - 0);
 
     var hBar = new HealthBar(gameEngine, 10, 10, 200, 30);
-    
+    var deadRobot = new DeadRobot(gameEngine, 317, 158);
+    var gundam = new Gundam(gameEngine, 2800, 124);
     var spikesTest = new Spikes(gameEngine, 695, 140, 31, 17);
     var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 21);
     var spikes3 = new Spikes(gameEngine, 1238, 189, 33, 18);
@@ -125,6 +130,8 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(powerup);
     // gameEngine.addEntity(ladder);
     gameEngine.addEntity(boss);
+    gameEngine.addEntity(deadRobot);
+    gameEngine.addEntity(gundam);
 
     //Add floor platforms
     gameEngine.addEntity(pBugFix);

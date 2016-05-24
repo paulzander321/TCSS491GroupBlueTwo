@@ -170,6 +170,10 @@ MegaMan.prototype.update = function() {
             this.takeDamage();
             this.jumping = true;
         }
+        if ((ent instanceof DeadRobot || ent instanceof Gundam)
+            && this.collision(ent)) {
+            this.takeDamage();
+        }
     }
 
     //Things Mega Man can do when alive
