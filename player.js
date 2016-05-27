@@ -153,6 +153,9 @@ MegaMan.prototype.update = function() {
                 this.shootFrequency = 250;
                 this.game.sounds.rapidFireUnlock.play();
                 setTimeout(function() {
+                    that.game.sounds.yeahBaby.play();
+                }, this.game.sounds.rapidFireUnlock.duration * 1000);
+                setTimeout(function() {
                     that.shootFrequency = 500;
                 }, 8000);
             } else if (ent.type == "speedup") {

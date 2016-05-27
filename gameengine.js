@@ -57,11 +57,16 @@ GameEngine.prototype.init = function (ctx) {
             a.volume = 0.5;
             a.play();
         },
-        rapidFireUnlock: new Audio("./sound/rapidfire.mp3")
+        rapidFireUnlock: new Audio("./sound/rapidfire.mp3"),
+        loseTaunt: new Audio("./sound/bestYouCanDo.wav"),
+        yeahBaby: new Audio("./sound/ohYeah.wav"),
+        yeehaw: new Audio("./sound/yeehaw.wav")
     };
     this.sounds.playerDeathSound.volume = 0.5;
-    this.sounds.backgroundMusic.volume = 0.3;
+    this.sounds.loseTaunt.volume = 0.6;
+    this.sounds.backgroundMusic.volume = 0.4;
     this.sounds.backgroundMusic.loop = true;
+    this.sounds.backgroundMusic.play();
 
     this.gameOver = false;
     this.ctx = ctx;
@@ -177,10 +182,13 @@ GameEngine.prototype.draw = function () {
 
     if (this.player.currentHealth < 1 && !this.gameOver) {
         var that = this;
+        that.sounds.gameOverSound.play();
         var setGameOver = setTimeout(function() {
             that.gameOver = true;
-            that.sounds.gameOverSound.play();
         }, 1500);
+        setTimeout(function() {
+            that.gameWon ? that.sounds.yeehaw.play() : that.sounds.loseTaunt.play();
+        }, that.sounds.gameOverSound.duration * 1000 + 200);
     }
     if (this.gameOver) {
         this.ctx.fillStyle = "black";
