@@ -30,9 +30,10 @@ Timer.prototype.tick = function () {
 function GameEngine() {
     this.playerCount = 1;
     this.entities = [];
-    this.showOutlines = false;
+    this.showOutlines = true;
     this.background = null;
     this.player = null;
+    this.boss = null;
     this.ctx = null;
     this.click = null;
     this.mouse = null;
@@ -42,16 +43,32 @@ function GameEngine() {
 }
 
 GameEngine.prototype.init = function (ctx) {
-    this.gamepads = [];
+    //Initialize game sounds
+    this.sounds = {
+        backgroundMusic: new Audio("./sound/megaman-music.mp3"),
+        gameOverSound: new Audio("./sound/gameover.wav"),
+        playerDeathSound: new Audio("./sound/megaman-death.mp3"),
+        playerHitSound: new Audio("./sound/WoundMedium.wav"),
+        deathScream: function() {
+            new Audio("./sound/willhelm.mp3").play();
+        },
+        shootProjectile: function() {
+            var a = new Audio("./sound/_Fire.wav");
+            a.volume = 0.5;
+            a.play();
+        },
+        rapidFireUnlock: new Audio("./sound/rapidfire.mp3")
+    };
+    this.sounds.playerDeathSound.volume = 0.5;
+    this.sounds.backgroundMusic.volume = 0.3;
+    this.sounds.backgroundMusic.loop = true;
+
     this.gameOver = false;
     this.ctx = ctx;
+    this.gameWon = false;
     this.scrolling = false;
     this.playerCanMove = true;
     this.scrollSpeed = 2.0;
-    this.backgroundMusic = new Audio("./sound/megaman-music.mp3");
-    this.backgroundMusic.volume = 0.3;
-    this.gameOverSound = new Audio("./sound/gameover.wav");
-    this.backgroundMusic.loop = true;
     this.screenScrolling = false;
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
@@ -99,15 +116,16 @@ GameEngine.prototype.startInput = function () {
         if (String.fromCharCode(e.which) === ' ') that.space = true;
 
         if (String.fromCharCode(e.which) === 'm') {
-            if (that.backgroundMusic.paused) {
-                that.backgroundMusic.play();
+            if (that.sounds.backgroundMusic.paused) {
+                that.sounds.backgroundMusic.play();
             } else {
-                that.backgroundMusic.pause();
+                that.sounds.backgroundMusic.pause();
             }
         }
 
-        if (String.fromCharCode(e.which) === 'a' && that.playerCount < 1) {
-            var tempMega = new MegaMan(that, Math.floor(Math.random() * 800), 300, 1.5);
+        if (String.fromCharCode(e.which) === 'a' && that.playerCount < 1 
+            && !that.gameWon) {
+            var tempMega = new MegaMan(that, that.surfaceWidth / 2, 300, 1.5);
             that.addEntity(tempMega);
             that.player = tempMega;
             that.gameOver = false;
@@ -161,7 +179,7 @@ GameEngine.prototype.draw = function () {
         var that = this;
         var setGameOver = setTimeout(function() {
             that.gameOver = true;
-            that.gameOverSound.play();
+            that.sounds.gameOverSound.play();
         }, 1500);
     }
     if (this.gameOver) {
@@ -170,25 +188,29 @@ GameEngine.prototype.draw = function () {
         this.ctx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
         this.ctx.fillStyle = "white";
         this.ctx.textAlign = "center";
-        this.ctx.fillText("Game Over", this.surfaceWidth / 2, this.surfaceHeight / 2);
+        var gameOverText = "";
+        this.gameWon ? gameOverText = "You won!" : gameOverText = "You lost...";
+        this.ctx.fillText(gameOverText, this.surfaceWidth / 2, this.surfaceHeight / 2);
     }
     this.ctx.restore();
 }
 
 GameEngine.prototype.update = function () {
-    var entitiesCount = this.entities.length;
+    if (!this.gameover) {
+        var entitiesCount = this.entities.length;
 
-    for (var i = 0; i < entitiesCount; i++) {
-        var entity = this.entities[i];
+        for (var i = 0; i < entitiesCount; i++) {
+            var entity = this.entities[i];
 
-        if (!entity.removeFromWorld) {
-            entity.update();
+            if (!entity.removeFromWorld) {
+                entity.update();
+            }
         }
-    }
 
-    for (var i = this.entities.length - 1; i >= 0; --i) {
-        if (this.entities[i].removeFromWorld) {
-            this.entities.splice(i, 1);
+        for (var i = this.entities.length - 1; i >= 0; --i) {
+            if (this.entities[i].removeFromWorld) {
+                this.entities.splice(i, 1);
+            }
         }
     }
 }

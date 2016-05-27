@@ -114,13 +114,13 @@ ASSET_MANAGER.downloadAll(function () {
     var spikes4 = new Spikes(gameEngine, 1463, 191, 65, 23);
     // var ladder = new Ladder(gameEngine, 856, 205, 16, 46);
     // var sp = new SandPerson(gameEngine, 215 * 3, 158 * 3);
-    var jawa = new Jawa(gameEngine, 1625, 158, p2);
-    var jawa2 = new Jawa(gameEngine, 632, 110);
-    var jawa3 = new Jawa(gameEngine, 3056, 187);
+    var jawa = new Jawa(gameEngine, 1625, 158, true);
+    var jawa2 = new Jawa(gameEngine, 632, 110, true);
+    var jawa3 = new Jawa(gameEngine, 3056, 187, false);
     // var jawa4 = new Jawa(gameEngine, 3246, 187);
     var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
     var powerup2 = new Powerup(gameEngine, 3220, 175, 15, "rapidfire");
-    var boss = new Boss(gameEngine, 3265, 180, p2);
+    gameEngine.boss = new Boss(gameEngine, 3265, 180, p2);
 
     gameEngine.addEntity(gameEngine.background);
     gameEngine.addEntity(spikes2);
@@ -129,7 +129,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(jawa3);
     gameEngine.addEntity(powerup);
     // gameEngine.addEntity(ladder);
-    gameEngine.addEntity(boss);
+    gameEngine.addEntity(gameEngine.boss);
     gameEngine.addEntity(deadRobot);
     gameEngine.addEntity(gundam);
 

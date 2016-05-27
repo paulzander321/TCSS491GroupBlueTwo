@@ -3,29 +3,17 @@
  */
 function Boss(game, x, y, platform) {
     this.platform = platform;
-    //this.utini = new Audio("./sound/utini.mp3");
     this.scaleBy = 2;
     this.health = 15;
-    // this.walking = true;
-    this.falling = true;
     this.started = false;
     this.shooting = false;
-    this.proneShot = false;
     this.hasShot = false;
     this.invisible = false;
-    var that = this;
-    //this.walkAnimation = new Animation(ASSET_MANAGER.getAsset("./img/fBirdLeft.gif"), 0, 0, 75, 93, 0.1, 4, true, false);
-
     this.shootAnimation = new Animation(ASSET_MANAGER.getAsset("./img/fBirdShootLeft.gif"), 0, 0, 80, 67, .16, 7, false, false);
     this.stillAnimation = new Animation(ASSET_MANAGER.getAsset("./img/fBirdStill.gif"), 0, 0, 80, 78, 0.15, 4, true, false);
-
     this.proneShotAnimation = new Animation(ASSET_MANAGER.getAsset("./img/fBirdShot2Left.gif"), 0, 0, 90, 102, 0.16, 8, false, false);
     this.currentAnimation = this.stillAnimation;
-    setInterval(function () {
-        //that.proneShot = Math.random() < .5;
-        that.shooting = true;
-        //that.walking = false;
-    }, 1000);
+    this.startedShooting = false;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.call(this, game, x * 3, y * 3);
@@ -37,14 +25,19 @@ Boss.prototype.constructor = Boss;
 Boss.prototype.update = function() {
     if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
     if (this.started) {
+        if (!this.startedShooting) {
+            var that = this;
+            setInterval(function () {
+                that.shooting = true;
+            }, 1000);
+            this.startedShooting = true;
+        }
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (this != ent && this.collision(ent)
                 && ((ent instanceof Shovel || ent instanceof Projectile) && ent.orig != this)) {
                 ent.removeFromWorld = true;
                 this.health--;
-                //this.utini.play();   PLAY SOUNDS
-                // ADD ANIMATION AND INVINCIBILTY WHEN HIT
                 console.log("BOSS was hit!");
                 var that = this;
                 var invisibleInterval = setInterval(function() {
@@ -60,14 +53,20 @@ Boss.prototype.update = function() {
             }
             if (ent instanceof Spikes && this.collision(ent)) {
                 this.removeFromWorld = true;
-                //this.utini.play();
             }
         }
 
-        if (this.health < 1) this.removeFromWorld = true;
+        if (this.health < 1) {
+            this.removeFromWorld = true;
+            var that = this;
+            setTimeout(function() {
+                that.game.gameWon = true;
+                that.game.sounds.gameOverSound.play();
+                that.game.gameOver = true;
+            }, 2000);
+        }
 
         if (this.falling) this.y += 5;
-        //if (this.walking) this.x -= 1;
         if (this.platform && this.x < this.platform.x) this.falling = true;
 
         if (this.shooting) {
@@ -75,14 +74,11 @@ Boss.prototype.update = function() {
                 this.currentAnimation.elapsedTime = 0;
                 this.shooting = false;
                 this.hasShot = false;
-                //this.walking = true;
             }
             if (!this.hasShot) {
-                if (this.proneShot) {
-                    var p = new FireBall(this.game, this, this.y - 10);
-                } else {
-                    var p = new FireBall(this.game, this);
-                }
+                var p = new FireBall(this.game, this, this.game.player.y 
+                                        - this.game.player.stillAnimation.frameHeight 
+                                        * this.game.player.scaleBy + 5);
                 p.setDX(-1);
                 this.game.addEntity(p);
                 this.hasShot = true;
@@ -101,8 +97,6 @@ Boss.prototype.draw = function (ctx) {
         } else {
             this.currentAnimation = this.shootAnimation;
         }
-    // } else if (this.walking) {
-    //     this.currentAnimation = this.walkAnimation;
     } else {
         this.currentAnimation = this.stillAnimation;
     }

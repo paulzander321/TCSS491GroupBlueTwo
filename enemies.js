@@ -1,8 +1,9 @@
-function Jawa(game, x, y, platform) {
-    this.platform = platform;
+function Jawa(game, x, y, proneShot) {
+    this.platform = null;
     this.utini = new Audio("./sound/utini.mp3");
-    this.scaleBy = 2;
+    this.scaleBy = 2.2;
     this.health = 4;
+    this.canShootProne = proneShot;
     this.walking = true;
     this.falling = true;
     this.started = false;
@@ -16,11 +17,7 @@ function Jawa(game, x, y, platform) {
     this.stillAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 31, 45, 28, 37, .2, 1, true, false);
     this.proneShotAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 132, 11, 48, 28, .2, 3, false, false);
     this.currentAnimation = this.stillAnimation;
-    setInterval(function () {
-        that.proneShot = Math.random() < .5;
-        that.shooting = true;
-        that.walking = false;
-    }, 1000);
+    this.shootIntervalStarted = false;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.call(this, game, x * 3, y * 3);
@@ -32,6 +29,15 @@ Jawa.prototype.constructor = Jawa;
 Jawa.prototype.update = function() {
     if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
     if (this.started) {
+        if (!this.shootIntervalStarted) {
+            var that = this;
+            setInterval(function () {
+                that.proneShot = that.canShootProne && Math.random() < .5;
+                that.shooting = true;
+                that.walking = false;
+            }, 1000);
+            this.shootIntervalStarted = true;
+        }
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (this != ent && this.collision(ent) 
@@ -58,7 +64,10 @@ Jawa.prototype.update = function() {
             }
         }
 
-        if (this.health < 1) this.removeFromWorld = true;
+        if (this.health < 1) {
+            this.removeFromWorld = true;
+            this.game.sounds.deathScream();
+        }
 
         if (this.falling) this.y += 5;
         if (this.walking) this.x -= 1;
@@ -75,10 +84,11 @@ Jawa.prototype.update = function() {
                 if (this.proneShot) {
                     var p = new Projectile(this.game, this, this.y - 10);
                 } else {
-                    var p = new Projectile(this.game, this);
+                    var p = new Projectile(this.game, this, this.y - (2 * this.height / 3));
                 }
-                p.setDX(-5);
+                p.setDX(-4);
                 this.game.addEntity(p);
+                if (this.onScreen()) this.game.sounds.shootProjectile();
                 this.hasShot = true;
             }
         }
@@ -86,6 +96,11 @@ Jawa.prototype.update = function() {
     }
     if (this.game.left && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
     if (this.game.right && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
+}
+
+Jawa.prototype.onScreen = function() {
+    return this.x + this.width >= 0 && this.x <= this.game.surfaceWidth
+            && this.y >= 0 && this.y - this.height <= this.game.surfaceHeight;
 }
 
 Jawa.prototype.draw = function (ctx) {

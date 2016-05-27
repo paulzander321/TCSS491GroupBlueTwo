@@ -3,8 +3,7 @@
  */
 function DeadRobot(game, x, y, platform) {
     this.platform = platform;
-    this.utini = new Audio("./sound/utini.mp3");
-    this.health = 4;
+    this.health = 3;
     this.walking = true;
     this.falling = true;
     this.started = false;
@@ -25,7 +24,7 @@ function DeadRobot(game, x, y, platform) {
     // this.proneShotAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 132, 11, 48, 28, .2, 3, false, false);
 
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/dead_robot.png"),
-        0, 0, 50, 39, 0.15, 6, true, false);
+        0, 8, 50, 31, 0.15, 6, true, false);
 
     this.currentAnimation = this.animation;
     // setInterval(function () {
@@ -43,16 +42,27 @@ DeadRobot.prototype = new Entity();
 DeadRobot.prototype.constructor = DeadRobot;
 
 DeadRobot.prototype.update = function() {
-    if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
-        this.x -= this.game.clockTick * this.speed;
-
+    if (this.health < 1) this.removeFromWorld = true;
     if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
     if (this.started) {
+        if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
+        this.x -= this.game.clockTick * this.speed;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (ent instanceof Platform && this.collision(ent)) {
                 this.falling = false;
                 this.platform = ent;
+            } else if (ent instanceof Projectile && this.collision(ent)) {
+                ent.removeFromWorld = true;
+                this.health--;
+                var that = this;
+                var invisibleInterval = setInterval(function() {
+                    that.invisible = !that.invisible;
+                }, 50);
+                setTimeout(function() {
+                    clearInterval(invisibleInterval);
+                    that.invisible = false;
+                }, 500);
             }
         }
         if (this.falling) this.y += 5;
@@ -67,7 +77,7 @@ DeadRobot.prototype.update = function() {
 }
 
 DeadRobot.prototype.draw = function (ctx) {
-    this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
+    if (!this.invisible) this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.prototype.draw.call(this);
@@ -91,37 +101,18 @@ DeadRobot.prototype.collision = function(other) {
 //=======================================================================
 function Gundam(game, x, y, platform) {
     this.platform = platform;
-    this.utini = new Audio("./sound/utini.mp3");
     this.health = 4;
     this.walking = true;
     this.falling = true;
     this.started = false;
-    this.shooting = false;
-    this.proneShot = false;
-    this.hasShot = false;
     this.invisible = false;
     var that = this;
-
     this.scaleBy = 1.25;
     this.speed = 100;
     this.game = game;
-
-
-    // this.walkAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 3, 8, 28, 37, .2, 4, true, false);
-    // this.shootAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 158, 99, 39, 35, .2, 3, false, false);
-    // this.stillAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 31, 45, 28, 37, .2, 1, true, false);
-    // this.proneShotAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 132, 11, 48, 28, .2, 3, false, false);
-
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/gundamReverse.png"),
         0, 0, 100, 43, 0.05, 9, true, false);
-
     this.currentAnimation = this.animation;
-    // setInterval(function () {
-    //     that.proneShot = Math.random() < .5;
-    //     that.shooting = true;
-    //     that.walking = false;
-    // }, 1000);
-
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.call(this, game, x * 3, y * 3);
@@ -131,16 +122,27 @@ Gundam.prototype = new Entity();
 Gundam.prototype.constructor = Gundam;
 
 Gundam.prototype.update = function() {
-    if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
-        this.x -= this.game.clockTick * this.speed;
-
+    if (this.health < 1) this.removeFromWorld = true;
     if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
     if (this.started) {
+        if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
+        this.x -= this.game.clockTick * this.speed;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (ent instanceof Platform && this.collision(ent)) {
                 this.falling = false;
                 this.platform = ent;
+            } else if (ent instanceof Projectile && this.collision(ent)) {
+                ent.removeFromWorld = true;
+                this.health--;
+                var that = this;
+                var invisibleInterval = setInterval(function() {
+                    that.invisible = !that.invisible;
+                }, 50);
+                setTimeout(function() {
+                    clearInterval(invisibleInterval);
+                    that.invisible = false;
+                }, 500);
             }
         }
         if (this.falling) this.y += 5;
@@ -155,7 +157,7 @@ Gundam.prototype.update = function() {
 }
 
 Gundam.prototype.draw = function (ctx) {
-    this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
+    if (!this.invisible) this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.prototype.draw.call(this);

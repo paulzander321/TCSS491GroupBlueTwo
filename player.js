@@ -13,14 +13,7 @@ function MegaMan(game, x, y, scaleBy) {
     this.platform = null;
     this.invincible = false;
     this.invisible = false;
-
-    //Sound stuff
-    this.deathSound = new Audio("./sound/megaman-death.mp3");
-    this.deathSound.volume = 0.5;
-    this.ouch = new Audio("./sound/ouch.mp3");
-    this.scream = new Audio("./sound/willhelm.mp3");
     this.deathSoundStarted = false;
-    this.rapidFireUnlock = new Audio("./sound/rapidfire.mp3");
     
     //Move left/right animations
     this.runRightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/MegaSheet.gif"), 558, 1192, 46, 39, 0.08, 10, true, false);
@@ -67,7 +60,7 @@ MegaMan.prototype.constructor = MegaMan;
 
 MegaMan.prototype.update = function() {
 
-    // if (!this.game.playerCanMove) this.game.playerCanMove = true;
+    if (!this.game.playerCanMove) this.game.playerCanMove = true;
 
     if (this.platform && this.collision(this.platform) && this.y > this.platform.y - this.platform.height + 8) {
         // this.y = this.platform.y - this.platform.height;
@@ -77,6 +70,7 @@ MegaMan.prototype.update = function() {
             this.x = this.platform.x + this.platform.width;
         }
         // this.game.playerCanMove = false;
+        // console.log("Player stuck beginning");
     }
 
     this.game.playerMoving = (this.x < this.game.surfaceWidth / 2 - this.width || this.x > this.game.surfaceWidth / 2 + this.width);
@@ -87,7 +81,7 @@ MegaMan.prototype.update = function() {
         this.dying = true;
         if (!this.deathSoundStarted) {
             this.deathSoundStarted = true;
-            this.deathSound.play();
+            this.game.sounds.playerDeathSound.play();
         }
     }
 
@@ -121,12 +115,8 @@ MegaMan.prototype.update = function() {
     //Mega Man is colliding with.
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
-        if (ent instanceof Boss && this.collision(ent)) {
-            this.takeDamage();
-        }
-
         if ((ent instanceof Projectile || ent instanceof FireBall) && ent.orig != this && this.collision(ent)) {
-            this.takeDamage();
+            ent instanceof Projectile ? this.takeDamage(1) : this.takeDamage(2);
             ent.removeFromWorld = true;
         } else if (ent instanceof Ladder && this.collision(ent)) {
             this.ladder = ent;
@@ -138,12 +128,18 @@ MegaMan.prototype.update = function() {
             if (this.platform != ent) console.log("Platform Change!");
             this.platform = ent;
         } else if (ent instanceof Platform && ent != this.platform && this.collision(ent) && !this.collisionAbove(ent)) {
+            var platformToTheRight = false;
             if (this.x + this.width > ent.x && this.x + this.width <= ent.x + ent.width) {
                 this.x = ent.x - this.width;
+                platformToTheRight = true;
             } else if (this.x < ent.x + ent.width && this.x > ent.x) {
                 this.x = ent.x + ent.width;
             }
-            // this.game.playerCanMove = false;
+            // if (!((!platformToTheRight && this.game.right && !this.game.left)
+            //     || (platformToTheRight && this.game.left && !this.game.right))) {
+                // this.game.playerCanMove = false;
+            // }
+            console.log("Player stuck below");
         } else if (ent instanceof Platform && this.collisionAbove(ent)) {
             //If Megaman hits a platform from below and he is jumping, will make him start to fall
             this.jumping = false;
@@ -155,7 +151,7 @@ MegaMan.prototype.update = function() {
             var that = this;
             if (ent.type == "rapidfire") {
                 this.shootFrequency = 250;
-                this.rapidFireUnlock.play();
+                this.game.sounds.rapidFireUnlock.play();
                 setTimeout(function() {
                     that.shootFrequency = 500;
                 }, 8000);
@@ -166,13 +162,14 @@ MegaMan.prototype.update = function() {
                 }, 8000);
             }
         }
-        if ((ent instanceof Spikes || ent instanceof Jawa) && this.collision(ent)) {
-            this.takeDamage();
+        if (ent instanceof Spikes && this.collision(ent)) {
+            this.takeDamage(1);
             this.jumping = true;
         }
-        if ((ent instanceof DeadRobot || ent instanceof Gundam)
+        if ((ent instanceof DeadRobot || ent instanceof Gundam || ent instanceof Jawa
+             || ent instanceof Boss)
             && this.collision(ent)) {
-            this.takeDamage();
+            this.takeDamage(3);
         }
     }
 
@@ -181,9 +178,9 @@ MegaMan.prototype.update = function() {
 
         //When the game can't scroll anymore, Megaman will now be able to move 
         if (!this.game.scrolling && !this.game.screenScrolling && this.game.right 
-            && !this.game.left && this.x + this.width < 3330 /*&& this.game.playerCanMove*/) this.x += this.game.scrollSpeed * 3;
+            && !this.game.left && this.x + this.width < 3330 && this.game.playerCanMove) this.x += this.game.scrollSpeed * 3;
         if (!this.game.scrolling && !this.game.screenScrolling && this.game.left 
-            && !this.game.right && this.x > 0 /*&& this.game.playerCanMove*/) this.x -= this.game.scrollSpeed * 3;
+            && !this.game.right && this.x > 0 && this.game.playerCanMove) this.x -= this.game.scrollSpeed * 3;
         if (this.x > 350 && this.x < 450) this.game.screenScrolling = true;
         if (!this.game.scrolling) this.game.screenScrolling = false;
 
@@ -192,6 +189,7 @@ MegaMan.prototype.update = function() {
             var projectile = new Projectile(this.game, this);
             this.facingRight ? projectile.setDX(5) : projectile.setDX(-5);
             this.game.addEntity(projectile);
+            this.game.sounds.shootProjectile();
             this.canShoot = false;
             var that = this;
             setTimeout(function () { // This handles recharge delay.
@@ -324,10 +322,10 @@ MegaMan.prototype.collisionSide = function(other) {
     return collisionX && collisionY;
 }
 
-MegaMan.prototype.takeDamage = function() {
+MegaMan.prototype.takeDamage = function(damageAmount) {
     var that = this;
-    if (!this.invincible) {
-        this.currentHealth--;
+    if (!this.invincible && !this.dying) {
+        this.currentHealth-=damageAmount;
         this.invincible = true;
         var invisibleInterval = setInterval(function() { //Makes megaman blink every 1/10th of a second when he is invincible.
             that.invisible = !that.invisible;
@@ -337,7 +335,7 @@ MegaMan.prototype.takeDamage = function() {
             clearInterval(invisibleInterval); //Makes Megaman stop blinking when he can take damage again.
             that.invisible = false;
         }, 1000);
+        this.game.sounds.playerHitSound.play();
     }
-    this.ouch.play();
     console.log("MegaMan has been hit! His health is at " + this.currentHealth);
 }
