@@ -53,7 +53,7 @@ GameEngine.prototype.init = function (ctx) {
             new Audio("./sound/willhelm.mp3").play();
         },
         shootProjectile: function() {
-            var a = new Audio("./sound/_Fire.wav");
+            var a = new Audio("./sound/Fire.wav");
             a.volume = 0.5;
             a.play();
         },
