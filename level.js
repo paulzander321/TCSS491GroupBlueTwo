@@ -21,7 +21,10 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
-    if (this.xOffset > 3088) this.lockScroll = true;
+    if (this.xOffset > 3088) {
+        this.lockScroll = true;
+        
+    }
     if (this.game.player && this.game.player.currentHealth > 0) {
         if (this.game.right && !this.game.left && !this.lockScroll && this.game.playerCanMove && !this.game.playerMoving) {
             this.xOffset+= this.game.scrollSpeed;

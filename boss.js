@@ -59,9 +59,10 @@ Boss.prototype.update = function() {
         if (this.health < 1) {
             this.removeFromWorld = true;
             var that = this;
+            that.game.sounds.gameOverSound.play();
             setTimeout(function() {
                 that.game.gameWon = true;
-                that.game.sounds.gameOverSound.play();
+                that.game.sounds.yeehaw.play();
                 that.game.gameOver = true;
             }, 2000);
         }
