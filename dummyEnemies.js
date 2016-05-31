@@ -4,6 +4,7 @@
 function DeadRobot(game, x, y, platform) {
     this.platform = platform;
     this.health = 3;
+    this.movingRight = false;
     this.walking = true;
     this.falling = true;
     this.started = false;
@@ -11,28 +12,14 @@ function DeadRobot(game, x, y, platform) {
     this.proneShot = false;
     this.hasShot = false;
     this.invisible = false;
-    var that = this;
-
     this.scaleBy = 2;
     this.speed = 100;
     this.game = game;
-
-
-    // this.walkAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 3, 8, 28, 37, .2, 4, true, false);
-    // this.shootAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 158, 99, 39, 35, .2, 3, false, false);
-    // this.stillAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 31, 45, 28, 37, .2, 1, true, false);
-    // this.proneShotAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 132, 11, 48, 28, .2, 3, false, false);
-
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/dead_robot.png"),
         0, 8, 50, 31, 0.15, 6, true, false);
-
+    this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/dead_robot_flip.png"),
+        0, 8, 50, 31, 0.15, 6, true, false);
     this.currentAnimation = this.animation;
-    // setInterval(function () {
-    //     that.proneShot = Math.random() < .5;
-    //     that.shooting = true;
-    //     that.walking = false;
-    // }, 1000);
-
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.call(this, game, x * 3, y * 3);
@@ -46,11 +33,14 @@ DeadRobot.prototype.update = function() {
     if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
     if (this.started) {
         if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
-        this.x -= this.game.clockTick * this.speed;
+        this.movingRight ? this.x += this.game.clockTick * this.speed : this.x -= this.game.clockTick * this.speed;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (ent instanceof Platform && this.collision(ent)) {
                 this.falling = false;
+                if (this.platform && ent != this.platform) {
+                    this.movingRight = !this.movingRight;
+                }
                 this.platform = ent;
             } else if (ent instanceof Projectile && this.collision(ent)) {
                 ent.removeFromWorld = true;
@@ -66,7 +56,13 @@ DeadRobot.prototype.update = function() {
             }
         }
         if (this.falling) this.y += 5;
-        if (this.platform && this.x < this.platform.x) this.falling = true;
+        if (this.platform && this.x + this.width / 2 < this.platform.x) {
+            this.movingRight = true;
+            this.rightAnimation.elapsedTime = 0;
+        } else if (this.platform && this.x + this.width / 2 > this.platform.x + this.platform.width) {
+            this.movingRight = false;
+            this.animation.elapsedTime = 0;
+        }
         Entity.prototype.update.call(this);
     }
 
@@ -77,6 +73,7 @@ DeadRobot.prototype.update = function() {
 }
 
 DeadRobot.prototype.draw = function (ctx) {
+    this.movingRight ? this.currentAnimation = this.rightAnimation : this.currentAnimation = this.animation;
     if (!this.invisible) this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;

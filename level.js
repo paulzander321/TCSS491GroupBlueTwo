@@ -9,6 +9,7 @@ var SPRITE_FRAME_HEIGHT = 230; //Height of sprite background frame
 function Background(game, x, y, width, height) {
     this.startX = x;
     this.startY = y;
+    this.game = game;
     this.lockScroll = false;
     this.width = width;
     this.height = height;
@@ -23,7 +24,13 @@ Background.prototype.constructor = Background;
 Background.prototype.update = function () {
     if (this.xOffset > 3088) {
         this.lockScroll = true;
-        
+        if (!this.game.gameOver && !this.game.boss) {
+            var newBoss = new Boss(this.game, 196 * 3,
+                                    188 * 3, null);
+            this.game.addEntity(newBoss);
+            this.game.boss = newBoss;
+            console.log("added boss");
+        }
     }
     if (this.game.player && this.game.player.currentHealth > 0) {
         if (this.game.right && !this.game.left && !this.lockScroll && this.game.playerCanMove && !this.game.playerMoving) {

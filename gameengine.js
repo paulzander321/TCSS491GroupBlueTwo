@@ -30,7 +30,7 @@ Timer.prototype.tick = function () {
 function GameEngine() {
     this.playerCount = 1;
     this.entities = [];
-    this.showOutlines = false;
+    this.showOutlines = true;
     this.background = null;
     this.player = null;
     this.boss = null;

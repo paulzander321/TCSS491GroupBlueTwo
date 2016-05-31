@@ -28,7 +28,7 @@ Jawa.prototype.constructor = Jawa;
 
 Jawa.prototype.update = function() {
     if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
-    if (this.started) {
+    if (this.started && !this.game.gameOver) {
         if (!this.shootIntervalStarted) {
             var that = this;
             setInterval(function () {

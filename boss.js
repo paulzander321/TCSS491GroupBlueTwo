@@ -14,9 +14,11 @@ function Boss(game, x, y, platform) {
     this.proneShotAnimation = new Animation(ASSET_MANAGER.getAsset("./img/fBirdShot2Left.gif"), 0, 0, 90, 102, 0.16, 8, false, false);
     this.currentAnimation = this.stillAnimation;
     this.startedShooting = false;
+    this.hovering = false;
+    this.falling = true;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
-    Entity.call(this, game, x * 3, y * 3);
+    Entity.call(this, game, x, y);
 }
 
 Boss.prototype = new Entity();
@@ -67,7 +69,7 @@ Boss.prototype.update = function() {
             }, 2000);
         }
 
-        if (this.falling) this.y += 5;
+        if (this.falling && !this.hovering) this.y += 5;
         if (this.platform && this.x < this.platform.x) this.falling = true;
 
         if (this.shooting) {
@@ -77,9 +79,7 @@ Boss.prototype.update = function() {
                 this.hasShot = false;
             }
             if (!this.hasShot) {
-                var p = new FireBall(this.game, this, this.game.player.y 
-                                        - this.game.player.stillAnimation.frameHeight 
-                                        * this.game.player.scaleBy + 5);
+                var p = new FireBall(this.game, this);
                 p.setDX(-1);
                 this.game.addEntity(p);
                 this.hasShot = true;

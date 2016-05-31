@@ -106,8 +106,8 @@ ASSET_MANAGER.downloadAll(function () {
     var p46 = new Platform(gameEngine, 3331, 230, 3346 - 3331, 230 - 0);
 
     var hBar = new HealthBar(gameEngine, 10, 10, 200, 30);
-    var deadRobot = new DeadRobot(gameEngine, 317, 158);
-    var gundam = new Gundam(gameEngine, 2800, 124);
+    var deadRobot = new DeadRobot(gameEngine, 375, 142);
+    var gundam = new Gundam(gameEngine, 2952, 187);
     var spikesTest = new Spikes(gameEngine, 695, 140, 31, 17);
     var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 21);
     var spikes3 = new Spikes(gameEngine, 1238, 189, 33, 18);
@@ -120,16 +120,20 @@ ASSET_MANAGER.downloadAll(function () {
     // var jawa4 = new Jawa(gameEngine, 3246, 187);
     var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
     var powerup2 = new Powerup(gameEngine, 3220, 175, 15, "rapidfire");
-    gameEngine.boss = new Boss(gameEngine, 3265, 180, p2);
+    // var boss = new Boss(gameEngine, 250 * 3, 150 * 3);
 
     gameEngine.addEntity(gameEngine.background);
+    gameEngine.addEntity(new Gundam(gameEngine, 2900, 187));
+    gameEngine.addEntity(new Gundam(gameEngine, 1834, 109));
+    gameEngine.addEntity(new Gundam(gameEngine, 495, 110));
+    gameEngine.addEntity(new DeadRobot(gameEngine, 890, 126));
     gameEngine.addEntity(spikes2);
     gameEngine.addEntity(spikes3);
     gameEngine.addEntity(spikes4);
     gameEngine.addEntity(jawa3);
     gameEngine.addEntity(powerup);
     // gameEngine.addEntity(ladder);
-    gameEngine.addEntity(gameEngine.boss);
+    // gameEngine.addEntity(boss);
     gameEngine.addEntity(deadRobot);
     gameEngine.addEntity(gundam);
 

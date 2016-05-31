@@ -6,11 +6,7 @@ function Projectile(game, orig, y) {
     this.dy = 0;
     this.leftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 177, 76, 17, 13, .1, 2, true, false);
     this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 173, 58, 17, 13, .1, 2, true, true);
-    if (y) {
-        this.y = y;
-    } else {
-        this.y = (this.orig.y + this.orig.y - this.orig.height) / 2;
-    }
+    y ? this.y = y : this.y = (this.orig.y + this.orig.y - this.orig.height) / 2;
     this.currentAnimation = this.leftAnimation;
 }
 
@@ -39,8 +35,13 @@ Projectile.prototype.draw = function(ctx) {
 
 Projectile.prototype.setDX = function(dx) {
     this.dx = dx;
-    dx > 0 ? this.x = this.orig.x + this.orig.width + 15 : this.x = this.orig.x - 15;
-    dx > 0 ? this.currentAnimation = this.rightAnimation : this.currentAnimation = this.leftAnimation;
+    if (dx > 0) {
+        this.x = this.orig.x + this.orig.width + 15;
+        this.currentAnimation = this.rightAnimation;
+    } else {
+        this.x = this.orig.x - 15;
+        this.currentAnimation = this.leftAnimation;
+    }
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
 }
@@ -96,17 +97,10 @@ function FireBall(game, orig, y) {
     this.scaleBy = this.orig.scaleBy;
     this.dx = 0;
     this.dy = 0;
-    this.leftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/fireball.gif"), 0, 0, 50, 65, 0.2, 4, true, true);
-    //this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/jawas.png"), 173, 58, 17, 13, .1, 2, true, true);
-    if (y) {
-        this.y = y;
-    } else {
-        this.y = (this.orig.y + this.orig.y - this.orig.height + 50) / 2;
-    }
+    this.leftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/fireball.gif"), 0, 8, 50, 47, 0.2, 4, true, true);
+    y ? this.y = y : this.y = (this.orig.y + this.orig.y - this.orig.height + 50) / 2;
     this.currentAnimation = this.leftAnimation;
 }
-
-
 
 FireBall.prototype = new Entity();
 FireBall.prototype.constructor = FireBall;
@@ -133,10 +127,10 @@ FireBall.prototype.draw = function(ctx) {
 
 FireBall.prototype.setDX = function(dx) {
     this.dx = dx;
-    dx > 0 ? this.x = this.orig.x + this.orig.width + 15 : this.x = this.orig.x - 15;
     dx > 0 ? this.currentAnimation = this.rightAnimation : this.currentAnimation = this.leftAnimation;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
+    dx > 0 ? this.x = this.orig.x + this.orig.width + 15 : this.x = this.orig.x - this.width - 15;
 }
 
 FireBall.prototype.collision = function(other) {

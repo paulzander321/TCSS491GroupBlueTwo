@@ -52,6 +52,7 @@ function MegaMan(game, x, y, scaleBy) {
     this.currentAnimation = this.stillAnimation;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
+    // this.box = new Box(this, this.x, this.y, this.width, this.height);
     Entity.call(this, game, x, y);
 }
 
@@ -186,6 +187,16 @@ MegaMan.prototype.update = function() {
             && !this.game.right && this.x > 0 && this.game.playerCanMove) this.x -= this.game.scrollSpeed * 3;
         if (this.x > 350 && this.x < 450) this.game.screenScrolling = true;
         if (!this.game.scrolling) this.game.screenScrolling = false;
+
+        // if (!this.game.scrolling && !this.game.screenScrolling && (this.x < this.width || this.x > this.game.surfaceWidth - this.width)) {
+        //     if (this.game.left && !this.game.right) {
+        //         this.game.background.xOffset -= this.game.scrollSpeed;
+        //         this.game.scrolling = true;
+        //     } else if (this.game.right && !this.game.left) {
+        //         this.game.background.xOffset += this.game.scrollSpeed;
+        //         this.game.scrolling = true;
+        //     }
+        // }
 
         //Shooting code
         if (this.game.shooting && this.canShoot) {
