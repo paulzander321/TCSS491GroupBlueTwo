@@ -182,3 +182,31 @@ Powerup.prototype.draw = function(ctx) {
     ctx.closePath();
     Entity.prototype.draw.call(this);
 }
+
+function HealthHeart(game, x, y, platform) {
+    this.x = (x - OFFSET_X) * SCALE; // Calculations to match up sprite dimensions with canvas dimensions
+    this.y = (y - OFFSET_Y) * SCALE;
+    this.width = 20 * SCALE;
+    this.height = 25 * SCALE;
+    this.platform = platform;
+    this.started = false;
+    this.game = game;
+    this.stillAnimation = new Animation(ASSET_MANAGER.getAsset("./img/health.png"), 0, 0, 20, 25, 0.1, 16, true, true);
+    Entity.call(this, game, this.x, this.y);
+}
+
+HealthHeart.prototype = new Entity();
+HealthHeart.prototype.constructor = HealthHeart;
+
+HealthHeart.prototype.update = function() {
+
+    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=SCALE * this.game.scrollSpeed;
+    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=SCALE * this.game.scrollSpeed;
+    if (this.game.up && !this.game.right && !this.game.left && this.game.scrolling) this.y+=SCALE * this.game.scrollSpeed;
+    if (this.game.down && !this.game.right && !this.game.left && this.game.scrolling) this.y-=SCALE * this.game.scrollSpeed;
+}
+
+HealthHeart.prototype.draw = function(ctx) {
+    this.stillAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, SCALE);
+    Entity.prototype.draw.call(this);
+}

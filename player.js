@@ -165,6 +165,10 @@ MegaMan.prototype.update = function() {
                     that.game.scrollSpeed = 2.0;
                 }, 8000);
             }
+        } else if (ent instanceof HealthHeart && this.collision(ent)) {
+            ent.removeFromWorld = true;
+            this.game.sounds.groovy.play();
+            this.currentHealth += 5;
         }
         if (ent instanceof Spikes && this.collision(ent)) {
             this.takeDamage(1);

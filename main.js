@@ -15,6 +15,7 @@ ASSET_MANAGER.queueDownload("./img/gundam.png");
 ASSET_MANAGER.queueDownload("./img/gundamReverse.png");
 ASSET_MANAGER.queueDownload("./img/dead_robot_flip.png");
 ASSET_MANAGER.queueDownload("./img/dead_robot.png");
+ASSET_MANAGER.queueDownload("./img/health.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Beginning 'Main' Code");
@@ -118,6 +119,8 @@ ASSET_MANAGER.downloadAll(function () {
     var jawa2 = new Jawa(gameEngine, 632, 110, true);
     var jawa3 = new Jawa(gameEngine, 3056, 187, false);
     // var jawa4 = new Jawa(gameEngine, 3246, 187);
+    var healthHeart = new HealthHeart(gameEngine, 900, 126, 15);
+    var healthHeart2 = new HealthHeart(gameEngine, 3050, 160, 15);
     var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
     var powerup2 = new Powerup(gameEngine, 3220, 175, 15, "rapidfire");
     // var boss = new Boss(gameEngine, 250 * 3, 150 * 3);
@@ -131,6 +134,8 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(spikes3);
     gameEngine.addEntity(spikes4);
     gameEngine.addEntity(jawa3);
+    gameEngine.addEntity(healthHeart);
+    gameEngine.addEntity(healthHeart2);
     gameEngine.addEntity(powerup);
     // gameEngine.addEntity(ladder);
     // gameEngine.addEntity(boss);

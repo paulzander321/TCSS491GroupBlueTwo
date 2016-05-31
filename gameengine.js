@@ -60,11 +60,12 @@ GameEngine.prototype.init = function (ctx) {
         rapidFireUnlock: new Audio("./sound/rapidfire.mp3"),
         loseTaunt: new Audio("./sound/bestYouCanDo.wav"),
         yeahBaby: new Audio("./sound/ohYeah.wav"),
-        yeehaw: new Audio("./sound/yeehaw.wav")
+        yeehaw: new Audio("./sound/yeehaw.wav"),
+        groovy: new Audio("./sound/groovy.wav")
     };
     this.sounds.playerDeathSound.volume = 0.5;
     this.sounds.loseTaunt.volume = 0.6;
-    this.sounds.backgroundMusic.volume = 0.4;
+    this.sounds.backgroundMusic.volume = 0.3;
     this.sounds.backgroundMusic.loop = true;
     this.sounds.backgroundMusic.play();
 
