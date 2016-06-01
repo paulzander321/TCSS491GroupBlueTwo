@@ -105,6 +105,105 @@ ASSET_MANAGER.downloadAll(function () {
     var p44 = new Platform(gameEngine, 2724, 230, 2739 - 2724, 230 - 170);
     var p45 = new Platform(gameEngine, 2739, 230, 3331 - 2739, 230 - 188); 
     var p46 = new Platform(gameEngine, 3331, 230, 3346 - 3331, 230 - 0);
+    var p47 = new Platform(gameEngine, 854, 230, 918 - 854, 230 - 156);
+
+    var p48 = new Platform(gameEngine, 1799, 230, 1846 - 1799, 230 - 156);
+
+    ////////////////////////////////////////
+    /////////////////MAP 2 PLATFORM DRAWINGS
+    ////////////////////////////////////////
+    //var map2_1 = new Platform(gameEngine, 0, 230, 256 - 0, 230 - 160);
+    //var map2_2 = new Platform(gameEngine, 256, 230, 320 - 256, 230 - 176);
+    //var map2_3 = new Platform(gameEngine, 320, 230, 416 - 320, 230 - 192);
+    //var map2_4 = new Platform(gameEngine, 416, 230, 512 - 416, 230 - 176);
+    //var map2_5 = new Platform(gameEngine, 512, 230, 608 - 512, 230 - 144);
+    //var map2_6 = new Platform(gameEngine, 608, 230, 704 - 608, 230 - 112);
+    //var map2_7 = new Platform(gameEngine, 704, 230, 936 - 704, 230 - 176);
+    //var map2_8 = new Platform(gameEngine, 936, 230, 1015 - 936, 230 - 160);
+    //var map2_9 = new Platform(gameEngine, 1015, 230, 1172 - 1015, 230 - 130);
+    //var map2_10 = new Platform(gameEngine, 1172, 230, 1192 - 1172, 230 - 160);
+    //var map2_11 = new Platform(gameEngine, 1192, 230, 1256 - 1192, 230 - 176);
+    //var map2_12 = new Platform(gameEngine, 1256, 230, 1352 - 1256, 230 - 192);
+    //var map2_13 = new Platform(gameEngine, 1352, 230, 1448 - 1352, 230 - 176);
+    //var map2_14 = new Platform(gameEngine, 1448, 230, 1544 - 1448, 230 - 144);
+    //var map2_15 = new Platform(gameEngine, 1544, 230, 1640 - 1544, 230 - 112);
+    //var map2_16 = new Platform(gameEngine, 1640, 230, 1960 - 1640, 230 - 176);
+    //var map2_17 = new Platform(gameEngine, 1960, 230, 2152 - 1960, 230 - 191);
+    //var map2_18 = new Platform(gameEngine, 2152, 230, 2472 - 2152, 230 - 175);
+    //var map2_19 = new Platform(gameEngine, 2472, 230, 2536 - 2472, 230 - 143);
+    //var map2_20 = new Platform(gameEngine, 2536, 230, 2600 - 2536, 230 - 159);
+    //var map2_21 = new Platform(gameEngine, 2600, 230, 2664 - 2600, 230 - 127);
+    //var map2_22 = new Platform(gameEngine, 2664, 230, 2760 - 2664, 230 - 95);
+    //var map2_23 = new Platform(gameEngine, 2760, 230, 2888 - 2760, 230 - 175);
+    //var map2_24 = new Platform(gameEngine, 2920, 230, 2973 - 2920, 230 - 175);
+    //var map2_25 = new Platform(gameEngine, 3016, 230, 3079 - 3016, 230 - 175);
+    //var map2_26 = new Platform(gameEngine, 3119, 230, 3271 - 3119, 230 - 175);
+    //var map2_27 = new Platform(gameEngine, 3271, 230, 3335 - 3271, 230 - 159);
+    //var map2_28 = new Platform(gameEngine, 3335, 230, 3398 - 3335, 230 - 127);
+    //var map2_29 = new Platform(gameEngine, 3398, 230, 3462 - 3398, 230 - 159);
+    //var map2_30 = new Platform(gameEngine, 3462, 230, 3525 - 3462, 230 - 127);
+    //var map2_31 = new Platform(gameEngine, 3525, 230, 3685 - 3525, 230 - 175);
+    //var map2_32 = new Platform(gameEngine, 3685, 230, 3749 - 3685, 230 - 159);
+    //var map2_33 = new Platform(gameEngine, 3749, 230, 3813 - 3749, 230 - 127);
+    //var map2_34 = new Platform(gameEngine, 3813, 230, 3909 - 3813, 230 - 95);
+    //var map2_35 = new Platform(gameEngine, 3909, 230, 3973 - 3909, 230 - 11);
+    //var map2_36 = new Platform(gameEngine, 3973, 230, 4105 - 3973, 230 - 175);
+    //var map2_37 = new Platform(gameEngine, 4105, 230, 4424 - 4105, 230 - 191);
+    //var map2_38 = new Platform(gameEngine, 4424, 230, 4441 - 4424, 230 - 127);
+
+
+    //var map2_R1 = new Platform(gameEngine, 1992, 31, 4441 - 1992, 31 - 0);
+    //var map2_R2 = new Platform(gameEngine, 2216, 70, 2280 - 2216, 70 - 0);
+    //var map2_R3 = new Platform(gameEngine, 2344, 70, 2408 - 2344, 70 - 0);
+    //var map2_R4 = new Platform(gameEngine, 2472, 70, 2536 - 2472, 70 - 0);
+
+    //gameEngine.addEntity(map2_1);
+    //gameEngine.addEntity(map2_2);
+    //gameEngine.addEntity(map2_3);
+    //gameEngine.addEntity(map2_4);
+    //gameEngine.addEntity(map2_5);
+    //gameEngine.addEntity(map2_6);
+    //gameEngine.addEntity(map2_7);
+    //gameEngine.addEntity(map2_8);
+    //gameEngine.addEntity(map2_9);
+    //gameEngine.addEntity(map2_10);
+    //gameEngine.addEntity(map2_11);
+    //gameEngine.addEntity(map2_12);
+    //gameEngine.addEntity(map2_13);
+    //gameEngine.addEntity(map2_14);
+    //gameEngine.addEntity(map2_15);
+    //gameEngine.addEntity(map2_16);
+    //gameEngine.addEntity(map2_17);
+    //gameEngine.addEntity(map2_18);
+    //gameEngine.addEntity(map2_19);
+    //gameEngine.addEntity(map2_20);
+    //gameEngine.addEntity(map2_21);
+    //gameEngine.addEntity(map2_22);
+    //gameEngine.addEntity(map2_23);
+    //gameEngine.addEntity(map2_24);
+    //gameEngine.addEntity(map2_25);
+    //gameEngine.addEntity(map2_26);
+    //gameEngine.addEntity(map2_27);
+    //gameEngine.addEntity(map2_28);
+    //gameEngine.addEntity(map2_29);
+    //gameEngine.addEntity(map2_30);
+    //gameEngine.addEntity(map2_31);
+    //gameEngine.addEntity(map2_32);
+    //gameEngine.addEntity(map2_33);
+    //gameEngine.addEntity(map2_34);
+    //gameEngine.addEntity(map2_35);
+    //gameEngine.addEntity(map2_36);
+    //gameEngine.addEntity(map2_37);
+    //gameEngine.addEntity(map2_38);
+
+    //gameEngine.addEntity(map2_R1);
+    //gameEngine.addEntity(map2_R2);
+    //gameEngine.addEntity(map2_R3);
+    //gameEngine.addEntity(map2_R4);
+
+
+
+
 
     var hBar = new HealthBar(gameEngine, 10, 10, 200, 30);
     var deadRobot = new DeadRobot(gameEngine, 375, 142);
@@ -188,6 +287,8 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(p44);
     gameEngine.addEntity(p45);
     gameEngine.addEntity(p46);
+    gameEngine.addEntity(p47);
+    gameEngine.addEntity(p48);
 
     gameEngine.addEntity(hBar);
 
