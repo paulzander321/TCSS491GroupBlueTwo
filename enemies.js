@@ -27,7 +27,7 @@ Jawa.prototype = new Entity();
 Jawa.prototype.constructor = Jawa;
 
 Jawa.prototype.update = function() {
-    if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
+    if (this.onScreen()) this.started = true;
     if (this.started && !this.game.gameOver) {
         if (!this.shootIntervalStarted) {
             var that = this;
@@ -94,13 +94,10 @@ Jawa.prototype.update = function() {
         }
         Entity.prototype.update.call(this);
     }
-    if (this.game.left && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
-    if (this.game.right && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
 }
 
 Jawa.prototype.onScreen = function() {
-    return this.x + this.width >= 0 && this.x <= this.game.surfaceWidth
-            && this.y >= 0 && this.y - this.height <= this.game.surfaceHeight;
+    return Math.abs(this.game.player.x - this.x) <= 400;
 }
 
 Jawa.prototype.draw = function (ctx) {

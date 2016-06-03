@@ -30,7 +30,7 @@ DeadRobot.prototype.constructor = DeadRobot;
 
 DeadRobot.prototype.update = function() {
     if (this.health < 1) this.removeFromWorld = true;
-    if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
+    if (Math.abs(this.game.player.x - this.x) <= 500) this.started = true;
     if (this.started) {
         if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
         this.movingRight ? this.x += this.game.clockTick * this.speed : this.x -= this.game.clockTick * this.speed;
@@ -41,7 +41,7 @@ DeadRobot.prototype.update = function() {
                 if (this.platform && ent != this.platform) {
                     this.movingRight = !this.movingRight;
                 }
-                this.platform = ent;
+                if (!this.platform) this.platform = ent;
             } else if (ent instanceof Projectile && this.collision(ent)) {
                 ent.removeFromWorld = true;
                 this.health--;
@@ -56,20 +56,15 @@ DeadRobot.prototype.update = function() {
             }
         }
         if (this.falling) this.y += 5;
-        if (this.platform && this.x + this.width / 2 < this.platform.x) {
+        if (this.platform && this.x < this.platform.x) {
             this.movingRight = true;
             this.rightAnimation.elapsedTime = 0;
-        } else if (this.platform && this.x + this.width / 2 > this.platform.x + this.platform.width) {
+        } else if (this.platform && this.x + this.width > this.platform.x + this.platform.width) {
             this.movingRight = false;
             this.animation.elapsedTime = 0;
         }
         Entity.prototype.update.call(this);
     }
-
-    //this two line needed when mega move backward and DeadRobot don't move backward do
-    // (DeadRobot move the direction it should be)
-    if (this.game.left && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
-    if (this.game.right && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
 }
 
 DeadRobot.prototype.draw = function (ctx) {
@@ -103,7 +98,6 @@ function Gundam(game, x, y, platform) {
     this.falling = true;
     this.started = false;
     this.invisible = false;
-    var that = this;
     this.scaleBy = 1.25;
     this.speed = 100;
     this.game = game;
@@ -120,7 +114,7 @@ Gundam.prototype.constructor = Gundam;
 
 Gundam.prototype.update = function() {
     if (this.health < 1) this.removeFromWorld = true;
-    if (this.x < this.game.surfaceWidth && this.x + this.width > 0) this.started = true;
+    if (Math.abs(this.game.player.x - this.x) <= 500) this.started = true;
     if (this.started) {
         if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
         this.x -= this.game.clockTick * this.speed;
@@ -146,11 +140,6 @@ Gundam.prototype.update = function() {
         if (this.platform && this.x < this.platform.x) this.falling = true;
         Entity.prototype.update.call(this);
     }
-
-    //this two line needed when mega move backward and Gundam don't move backward do
-    // (Gundam move the direction it should be)
-    if (this.game.left && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
-    if (this.game.right && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
 }
 
 Gundam.prototype.draw = function (ctx) {
@@ -175,41 +164,3 @@ Gundam.prototype.collision = function(other) {
 
 
 //=================================================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

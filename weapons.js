@@ -23,8 +23,6 @@ Projectile.prototype.update = function() {
     if (this.x < 0) this.removeFromWorld = true;
     this.x += this.dx * this.game.scrollSpeed;
     this.y += this.dy * this.game.scrollSpeed;
-    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
-    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
     Entity.prototype.update.call(this);
 }
 
@@ -115,8 +113,6 @@ FireBall.prototype.update = function() {
     if (this.x < 0) this.removeFromWorld = true;
     this.x += this.dx * this.game.scrollSpeed;
     this.y += this.dy * this.game.scrollSpeed;
-    if (this.game.left && !this.game.right && this.game.scrolling) this.x+=3 * this.game.scrollSpeed;
-    if (this.game.right && !this.game.left && this.game.scrolling) this.x-=3 * this.game.scrollSpeed;
     Entity.prototype.update.call(this);
 }
 

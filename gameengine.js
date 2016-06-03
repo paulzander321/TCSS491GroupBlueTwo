@@ -30,9 +30,11 @@ Timer.prototype.tick = function () {
 function GameEngine() {
     this.playerCount = 1;
     this.entities = [];
-    this.showOutlines = false;
+    this.cameraStart = 0;
+    this.showOutlines = true;
     this.background = null;
     this.player = null;
+    this.camera = null;
     this.boss = null;
     this.ctx = null;
     this.click = null;
@@ -61,7 +63,8 @@ GameEngine.prototype.init = function (ctx) {
         loseTaunt: new Audio("./sound/bestYouCanDo.wav"),
         yeahBaby: new Audio("./sound/ohYeah.wav"),
         yeehaw: new Audio("./sound/yeehaw.wav"),
-        groovy: new Audio("./sound/groovy.wav")
+        groovy: new Audio("./sound/groovy.wav"),
+        ambush: new Audio("./sound/ambush.wav")
     };
     this.sounds.playerDeathSound.volume = 0.5;
     this.sounds.loseTaunt.volume = 0.6;
@@ -72,10 +75,7 @@ GameEngine.prototype.init = function (ctx) {
     this.gameOver = false;
     this.ctx = ctx;
     this.gameWon = false;
-    this.scrolling = false;
-    this.playerCanMove = true;
     this.scrollSpeed = 2.0;
-    this.screenScrolling = false;
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.startInput();
@@ -129,13 +129,16 @@ GameEngine.prototype.startInput = function () {
             }
         }
 
-        if (String.fromCharCode(e.which) === 'a' && that.playerCount < 1 
-            && !that.gameWon) {
-            var tempMega = new MegaMan(that, that.surfaceWidth / 2, 300, 1.5);
-            that.addEntity(tempMega);
-            that.player = tempMega;
-            that.gameOver = false;
-            that.playerCount++;
+        if (String.fromCharCode(e.which) === 'a' && that.playerCount < 1) {
+            if (!that.gameWon) {
+                var tempMega = new MegaMan(that, that.player.x, 300, 1.5);
+                that.camera.target = tempMega;
+                that.addEntity(tempMega);
+                that.player = tempMega;
+                that.gameOver = false;
+                that.playerCount++;
+            } 
+            // This is where we would start level two if the level was won. 
         }
 
         e.preventDefault();
@@ -194,12 +197,12 @@ GameEngine.prototype.draw = function () {
     if (this.gameOver) {
         this.ctx.fillStyle = "black";
         this.ctx.font="60px Georgia";
-        this.ctx.fillRect(0, 0, this.surfaceWidth, this.surfaceHeight);
+        this.ctx.fillRect(0, 0, this.background.width * 3, this.surfaceHeight);
         this.ctx.fillStyle = "white";
         this.ctx.textAlign = "center";
         var gameOverText = "";
         this.gameWon ? gameOverText = "You won!" : gameOverText = "You lost...";
-        this.ctx.fillText(gameOverText, this.surfaceWidth / 2, this.surfaceHeight / 2);
+        this.ctx.fillText(gameOverText, this.camera.curX, this.surfaceHeight / 2);
     }
     this.ctx.restore();
 }
@@ -207,7 +210,6 @@ GameEngine.prototype.draw = function () {
 GameEngine.prototype.update = function () {
     if (!this.gameover) {
         var entitiesCount = this.entities.length;
-
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
