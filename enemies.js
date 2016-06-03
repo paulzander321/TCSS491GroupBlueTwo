@@ -130,6 +130,40 @@ Jawa.prototype.collision = function(other) {
     return collisionX && collisionY;
 }
 
+function Pterofractal(game, x, y, scale) {
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/pterofractal.png"), 100, 100, 1924, 902, .2, 1, true, false);
+    this.currentAnimation = this.animation;
+    this.scaleBy = scale;
+    this.width = this.currentAnimation.frameWidth * scale;
+    this.height = this.currentAnimation.frameHeight * scale;
+    this.spawnMinion = false;
+    var that = this;
+    setInterval(function() {
+        that.spawnMinion = true;
+    }, 2000);
+    Entity.call(this, game, x * 3, y * 3);
+}
+
+Pterofractal.prototype = new Entity();
+Pterofractal.prototype.constructor = Pterofractal;
+
+Pterofractal.prototype.update = function() {
+    if (this.spawnMinion) {
+        this.spawnMinion = false;
+        this.game.addEntity(new Gundam(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3));
+    }
+    this.x -= 5;
+    if (this.x + this.width < 0) this.removeFromWorld = true;
+    Entity.prototype.update.call(this);
+}
+
+Pterofractal.prototype.draw = function(ctx) {
+    this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
+    this.width = this.currentAnimation.frameWidth * this.scaleBy;
+    this.height = this.currentAnimation.frameHeight * this.scaleBy;
+    Entity.prototype.draw.call(this);
+}
+
 // function SandPerson(game, x, y) {
 //     this.scaleBy = 1.5;
 //     this.health = 3;

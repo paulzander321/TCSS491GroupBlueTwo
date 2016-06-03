@@ -16,6 +16,7 @@ ASSET_MANAGER.queueDownload("./img/gundamReverse.png");
 ASSET_MANAGER.queueDownload("./img/dead_robot_flip.png");
 ASSET_MANAGER.queueDownload("./img/dead_robot.png");
 ASSET_MANAGER.queueDownload("./img/health.png");
+ASSET_MANAGER.queueDownload("./img/pterofractal.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Beginning 'Main' Code");
@@ -154,6 +155,7 @@ function MakeLevelOne(gameEngine) {
     // gameEngine.addEntity(boss);
     gameEngine.addEntity(deadRobot);
     gameEngine.addEntity(gundam);
+    gameEngine.addEntity(new Pterofractal(gameEngine, 560, 55, .2));
 
     //Add floor platforms
     gameEngine.addEntity(pBugFix);
