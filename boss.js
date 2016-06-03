@@ -18,6 +18,11 @@ function Boss(game, x, y, platform) {
     this.falling = true;
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
+    this.spawnMinion = false;
+    var that = this;
+    setInterval(function() {
+        that.spawnMinion = true;
+    }, 5000);
     Entity.call(this, game, x, y);
 }
 
@@ -25,6 +30,10 @@ Boss.prototype = new Entity();
 Boss.prototype.constructor = Boss;
 
 Boss.prototype.update = function() {
+    if (this.spawnMinion) {
+        this.spawnMinion = false;
+        this.game.addEntity(new DeadRobot(this.game, this.x / 3 - 5, this.y / 3));
+    }
     if (!this.startedShooting) {
         var that = this;
         setInterval(function () {
