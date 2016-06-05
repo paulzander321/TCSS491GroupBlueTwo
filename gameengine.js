@@ -31,7 +31,7 @@ function GameEngine() {
     this.playerCount = 1;
     this.entities = [];
     this.cameraStart = 0;
-    this.showOutlines = false;
+    this.showOutlines = true;
     this.background = null;
     this.player = null;
     this.camera = null;

@@ -68,11 +68,14 @@ Boss.prototype.update = function() {
     if (this.health < 1) {
         this.removeFromWorld = true;
         var that = this;
-        that.game.sounds.gameOverSound.play();
+        // that.game.sounds.gameOverSound.play();
         setTimeout(function() {
-            that.game.gameWon = true;
+            // that.game.gameWon = true;
             that.game.sounds.yeehaw.play();
-            that.game.gameOver = true;
+            that.game.ctx.translate(that.game.camera.curX - that.game.camera.origX, 0);
+            that.game.entities = [];
+            that.game.makeLevelTwo();
+            // that.game.gameOver = true;
         }, 2000);
     }
 

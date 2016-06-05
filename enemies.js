@@ -130,16 +130,20 @@ Jawa.prototype.collision = function(other) {
     return collisionX && collisionY;
 }
 
-function Pterofractal(game, x, y, scale) {
+function Pterofractal(game, x, y, scale, leftEnd, rightEnd) {
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/pterofractal.png"), 100, 100, 1924, 902, .2, 1, true, false);
+    this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/pterofractal.png"), 2076, 96, 1923, 900, .2, 1, true, false);
     this.currentAnimation = this.animation;
+    this.facingRight = false;
     this.scaleBy = scale;
+    this.leftEnd = leftEnd;
+    this.rightEnd = rightEnd;
     this.width = this.currentAnimation.frameWidth * scale;
     this.height = this.currentAnimation.frameHeight * scale;
     this.spawnMinion = false;
     var that = this;
     setInterval(function() {
-        that.spawnMinion = true;
+        if (Math.abs(that.game.player.x - that.x) < 400) that.spawnMinion = true;
     }, 2000);
     Entity.call(this, game, x * 3, y * 3);
 }
@@ -156,12 +160,19 @@ Pterofractal.prototype.update = function() {
         this.game.addEntity(new Penguin(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3, 1));
         // this.game.addEntity(new Gundam(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3, 2));
     }
-    this.x -= 5;
+    this.facingRight ? this.x += 5 : this.x -= 5;
+    if (this.x < this.leftEnd) this.facingRight = true;
+    if (this.x + this.width > this.rightEnd) this.facingRight = false;
     if (this.x + this.width < 0) this.removeFromWorld = true;
     Entity.prototype.update.call(this);
 }
 
 Pterofractal.prototype.draw = function(ctx) {
+    if (this.facingRight) {
+        this.currentAnimation = this.rightAnimation;
+    } else {
+        this.currentAnimation = this.animation;
+    }
     this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
@@ -191,12 +202,19 @@ Penguin.prototype.update = function() {
     if (this.health < 1) this.removeFromWorld = true;
     if (Math.abs(this.game.player.x - this.x) <= 500) this.started = true;
     if (this.started) {
-        this.x -= 1;
+        if (this.movingRight) {
+            this.x += 1;
+        } else {
+            this.x -= 1;
+        }
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (ent instanceof Platform && this.collision(ent)) {
+                if (this.platform && ent != this.platform) {
+                    this.movingRight = !this.movingRight;
+                }
+                if (!this.platform || this.falling) this.platform = ent;
                 this.falling = false;
-                this.platform = ent;
             } else if (ent instanceof Projectile && this.collision(ent)) {
                 ent.removeFromWorld = true;
                 this.health--;
@@ -211,13 +229,14 @@ Penguin.prototype.update = function() {
             }
         }
         if (this.falling) this.y += 5;
-        if (this.platform && this.x < this.platform.x) this.falling = true;
+        if (this.platform && (this.x < this.platform.x || this.x + this.width 
+            > this.platform.x + this.platform.width)) this.falling = true;
         Entity.prototype.update.call(this);
     }
 }
 
 Penguin.prototype.draw = function(ctx) {
-    if (this.facingRight) {
+    if (this.movingRight) {
         this.currentAnimation = this.waddleRightAnimation;
     } else {
         this.currentAnimation = this.waddleLeftAnimation;
