@@ -173,7 +173,8 @@ MegaMan.prototype.update = function() {
 
     //Things Mega Man can do when alive
     if (!this.dying) {
-        if (this.game.right && !this.game.left && this.x + this.width < 3330 * 3 && !this.lockMovement) this.x += this.game.scrollSpeed * 3;
+        if (this.game.right && !this.game.left && ((this.game.level == 1 && this.x + this.width < 3330 * 3) 
+            || (this.game.level == 2 && this.x + this.width < 4441 * 3)) && !this.lockMovement) this.x += this.game.scrollSpeed * 3;
         if (this.game.left && !this.game.right && this.x > 0 && !this.lockMovement) {
             if (!this.game.camera.cameraLock || this.x > this.game.camera.curX - this.game.cameraStart) {
                 this.x -= this.game.scrollSpeed * 3;
@@ -325,7 +326,7 @@ MegaMan.prototype.collisionSide = function(other) {
 
 MegaMan.prototype.takeDamage = function(damageAmount) {
     var that = this;
-    if (!this.invincible && !this.dying) {
+    if (!this.invincible && !this.dying && !this.game.transitioning) {
         this.currentHealth-=damageAmount;
         this.invincible = true;
         var invisibleInterval = setInterval(function() { //Makes megaman blink every 1/10th of a second when he is invincible.

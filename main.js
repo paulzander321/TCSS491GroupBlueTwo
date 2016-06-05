@@ -25,23 +25,14 @@ ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
     var gameEngine = new GameEngine();
-    gameEngine.makeLevelTwo();
-    // var levelOneNow = false;
-    // setInterval(function() {
-    //     gameEngine.ctx.translate(gameEngine.camera.curX - gameEngine.camera.origX, 0);
-    //     gameEngine.entities = [];
-    //     if (!levelOneNow) {
-    //         gameEngine.MakeLevelOne();
-    //     } else {
-    //         gameEngine.MakeLevelTwo();
-    //     }
-    //     levelOneNow = !levelOneNow;
-    // }, 2000);
+    gameEngine.makeLevelOne();
+    // gameEngine.makeLevelTwo();
     gameEngine.init(ctx);
     gameEngine.start();
 });
 
 GameEngine.prototype.makeLevelOne = function() {
+    this.level = 1;
     this.background = new Background(this, 3346, 230, ASSET_MANAGER.getAsset("./img/stage.png"));
     this.player = new MegaMan(this, 387, 500, 1.5, true);
     this.cameraStart = 387;
@@ -168,7 +159,7 @@ GameEngine.prototype.makeLevelOne = function() {
     // this.addEntity(boss);
     this.addEntity(deadRobot);
     this.addEntity(gundam);
-    this.addEntity(new Pterofractal(this, 560, 110, .5));
+    // this.addEntity(new Pterofractal(this, 560, 110, .5));
 
     //Add floor platforms
     this.addEntity(pBugFix);
@@ -265,6 +256,7 @@ GameEngine.prototype.makeLevelTwo = function() {
     ////////////////////////////////////////
     /////////////////MAP 2 PLATFORM DRAWINGS
     ////////////////////////////////////////
+    this.level = 2;
     this.background = new Background(this, 4441, 230, ASSET_MANAGER.getAsset("./img/stage2.png"));
     this.player = new MegaMan(this, 387, 400, 1.5, true);
     this.cameraStart = 387;
@@ -305,46 +297,46 @@ GameEngine.prototype.makeLevelTwo = function() {
     var map2_32 = new Platform(this, 3685, 230, 3749 - 3685, 230 - 159);
     var map2_33 = new Platform(this, 3749, 230, 3813 - 3749, 230 - 127);
     var map2_34 = new Platform(this, 3813, 230, 3909 - 3813, 230 - 95);
-    var map2_35 = new Platform(this, 3909, 230, 3973 - 3909, 230 - 11);
+    var map2_35 = new Platform(this, 3909, 230, 3973 - 3909, 118);
     var map2_36 = new Platform(this, 3973, 230, 4105 - 3973, 230 - 175);
     var map2_37 = new Platform(this, 4105, 230, 4424 - 4105, 230 - 191);
     var map2_38 = new Platform(this, 4424, 230, 4441 - 4424, 230 - 127);
+    
+    var gundam = new Gundam(this, 657, 112);
+    var gundam2 = new Gundam(this, 1415, 175);
+    var gundam3 = new Gundam(this, 1528, 143);
+    var gundam4 = new Gundam(this, 1628, 111);
+    var gundam5 = new Gundam(this, 2185, 174);
+    var gundam6 = new Gundam(this, 3378, 126);
 
+    var jawa = new Jawa(this, 588, 143, true);
+    var jawa2 = new Jawa(this, 1146, 130, true);
+    var jawa3 = new Jawa(this, 1930, 175, false);
+    var jawa4 = new Jawa(this, 2288, 174, true);
+    var jawa5 = new Jawa(this, 2442, 174, true);
+    var jawa6 = new Jawa(this, 3239, 174);
+    var jawa7 = new Jawa(this, 3726, 158);
 
+    var deadRobot = new DeadRobot(this, 461, 175);
+    var deadRobot2 = new DeadRobot(this, 772, 175);
+    var deadRobot3 = new DeadRobot(this, 891, 175);
+    var deadRobot4 = new DeadRobot(this, 1826, 175);
+    var deadRobot5 = new DeadRobot(this, 2550, 158);
+    var deadRobot6 = new DeadRobot(this, 2607, 126);
+    var deadRobot7 = new DeadRobot(this, 2739, 94);
+    var deadRobot8 = new DeadRobot(this, 3494, 126);
+
+    var healthHeart = new HealthHeart(this, 1620, 111, 15);
+    var healthHeart2 = new HealthHeart(this, 3042, 174, 15);
+    var healthHeart3 = new HealthHeart(this, 3852, 94, 15);
     var hBar = new HealthBar(this, 10, 10, 200, 30);
-    var deadRobot = new DeadRobot(this, 375, 142);
-    var gundam = new Gundam(this, 2952, 187);
-    var jawa = new Jawa(this, 1625, 158, true);
-    var jawa2 = new Jawa(this, 632, 110, true);
-    var jawa3 = new Jawa(this, 3056, 187, false);
-    var healthHeart = new HealthHeart(this, 1772, 200, 15);
-    var healthHeart2 = new HealthHeart(this, 2490, 225, 15);
-    var powerup = new Powerup(this, 450, 126, 15, "rapidfire");
-
-    this.addEntity(this.background);
-    this.addEntity(new Gundam(this, 2900, 187));
-    this.addEntity(new Gundam(this, 1834, 109));
-    this.addEntity(new Gundam(this, 495, 110));
-    this.addEntity(new DeadRobot(this, 890, 126));
-    this.addEntity(new DeadRobot(this, 800, 200));
-    this.addEntity(new DeadRobot(this, 1742, 200));
-    this.addEntity(new HealthHeart(this, 825, 204));
-    this.addEntity(jawa3);
-    this.addEntity(healthHeart);
-    this.addEntity(healthHeart2);
-    this.addEntity(powerup);
-    // this.addEntity(powerup2);
-    // this.addEntity(ladder);
-    // this.addEntity(boss);
-    this.addEntity(deadRobot);
-    this.addEntity(gundam);
-    this.addEntity(new Pterofractal(this, 5, 60, .2, 0, 1950));
-
 
     var map2_R1 = new Platform(this, 1992, 31, 4441 - 1992, 31 - 0);
     var map2_R2 = new Platform(this, 2216, 70, 2280 - 2216, 70 - 0);
     var map2_R3 = new Platform(this, 2344, 70, 2408 - 2344, 70 - 0);
     var map2_R4 = new Platform(this, 2472, 70, 2536 - 2472, 70 - 0);
+
+    this.addEntity(this.background);
 
     this.addEntity(map2_1);
     this.addEntity(map2_2);
@@ -390,9 +382,33 @@ GameEngine.prototype.makeLevelTwo = function() {
     this.addEntity(map2_R3);
     this.addEntity(map2_R4);
 
+    this.addEntity(gundam);
+    this.addEntity(gundam2);
+    this.addEntity(gundam3);
+    this.addEntity(gundam4);
+    this.addEntity(gundam5);
+    this.addEntity(gundam6);
+    this.addEntity(jawa);
+    this.addEntity(jawa2);
+    this.addEntity(jawa3);
+    this.addEntity(jawa4);
+    this.addEntity(jawa5);
+    this.addEntity(jawa6);
+    this.addEntity(jawa7);
+    this.addEntity(deadRobot);
+    this.addEntity(deadRobot2);
+    this.addEntity(deadRobot3);
+    this.addEntity(deadRobot4);
+    this.addEntity(deadRobot5);
+    this.addEntity(deadRobot6);
+    this.addEntity(deadRobot7);
+    this.addEntity(deadRobot8);
+    this.addEntity(healthHeart);
+    this.addEntity(healthHeart2);
+    this.addEntity(healthHeart3);
+    this.addEntity(new Pterofractal(this, 4283, 60, .2, 3986, 4380));
+
     this.addEntity(hBar);
 
     this.addEntity(this.player);
-    this.addEntity(jawa);
-    this.addEntity(jawa2);
 }

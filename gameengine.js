@@ -31,7 +31,8 @@ function GameEngine() {
     this.playerCount = 1;
     this.entities = [];
     this.cameraStart = 0;
-    this.showOutlines = true;
+    this.level = 0;
+    this.showOutlines = false;
     this.background = null;
     this.player = null;
     this.camera = null;
@@ -42,6 +43,8 @@ function GameEngine() {
     this.wheel = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
+    this.transitioning = false;
+    this.loadingDots = 0;
 }
 
 GameEngine.prototype.init = function (ctx) {
@@ -66,7 +69,9 @@ GameEngine.prototype.init = function (ctx) {
         groovy: new Audio("./sound/groovy.wav"),
         ambush: new Audio("./sound/ambush.wav"),
         howslife: new Audio("./sound/howslife.wav"),
-        ayy: new Audio("./sound/chris.wav")
+        ayy: new Audio("./sound/chris.wav"),
+        singing: new Audio("./sound/singing_in_the_rain.wav"),
+        lights: new Audio("./sound/lights.wav")
     };
     this.sounds.playerDeathSound.volume = 0.5;
     this.sounds.loseTaunt.volume = 0.6;
@@ -205,6 +210,15 @@ GameEngine.prototype.draw = function () {
         var gameOverText = "";
         this.gameWon ? gameOverText = "You won!" : gameOverText = "You lost...";
         this.ctx.fillText(gameOverText, this.camera.curX, this.surfaceHeight / 2);
+    } else if (this.transitioning) {
+        this.ctx.fillStyle = "black";
+        this.ctx.font="60px Georgia";
+        this.ctx.fillRect(0, 0, this.background.width * 3, this.surfaceHeight);
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = "center";
+        var loadingText = "Loading";
+        loadingText += ".".repeat(this.loadingDots);
+        this.ctx.fillText(loadingText, this.camera.curX, this.surfaceHeight / 2);
     }
     this.ctx.restore();
 }
@@ -233,6 +247,26 @@ GameEngine.prototype.loop = function () {
     this.update();
     this.draw();
     this.space = null;
+}
+
+GameEngine.prototype.mapTransition = function() {
+    var that = this;
+    setTimeout(function() {
+        that.sounds.lights.play();
+        that.transitioning = true;
+        var loadingDots = setInterval(function() {
+            that.loadingDots++;
+            if (that.loadingDots > 3) that.loadingDots = 0;
+        }, 500);
+        setTimeout(function() {
+            clearInterval(loadingDots);
+            that.transitioning = false;
+            that.ctx.translate(that.camera.curX - that.camera.origX, 0);
+            that.entities = [];
+            that.makeLevelTwo();
+        }, 3000);
+    }, 1500);
+    
 }
 
 function Entity(game, x, y) {

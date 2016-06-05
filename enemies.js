@@ -70,7 +70,7 @@ Jawa.prototype.update = function() {
         }
 
         if (this.falling) this.y += 5;
-        if (this.walking) this.x -= 1;
+        if (this.walking && (!this.platform || this.x > this.platform.x)) this.x -= 1;
         if (this.platform && this.x < this.platform.x) this.falling = true;
 
         if (this.shooting) {
@@ -135,6 +135,7 @@ function Pterofractal(game, x, y, scale, leftEnd, rightEnd) {
     this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/pterofractal.png"), 2076, 96, 1923, 900, .2, 1, true, false);
     this.currentAnimation = this.animation;
     this.facingRight = false;
+    this.health = 10;
     this.scaleBy = scale;
     this.leftEnd = leftEnd;
     this.rightEnd = rightEnd;
@@ -155,9 +156,14 @@ Pterofractal.prototype.update = function() {
     if (Math.abs(this.game.player.x - this.x) <= 600) {
         this.game.sounds.howslife.play();
     }
+    if (this.health < 1) {
+        this.game.gameWon = true;
+        this.game.gameOver = true;
+        this.removeFromWorld = true;
+    }
     if (this.spawnMinion) {
         this.spawnMinion = false;
-        this.game.addEntity(new Penguin(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3, 1));
+        this.game.addEntity(new Penguin(this.game, this, (this.x + this.width / 2) / 3, (this.y + 10) / 3, 1));
         // this.game.addEntity(new Gundam(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3, 2));
     }
     this.facingRight ? this.x += 5 : this.x -= 5;
@@ -179,9 +185,10 @@ Pterofractal.prototype.draw = function(ctx) {
     Entity.prototype.draw.call(this);
 }
 
-function Penguin(game, x, y, scale) {
+function Penguin(game, orig, x, y, scale) {
     this.platform = null;
     this.falling = true;
+    this.orig = orig;
     this.health = 3;
     this.invincible = false;
     this.movingRight = false;
@@ -199,7 +206,10 @@ Penguin.prototype = new Entity();
 Penguin.prototype.constructor = Penguin;
 
 Penguin.prototype.update = function() {
-    if (this.health < 1) this.removeFromWorld = true;
+    if (this.health < 1) {
+        this.removeFromWorld = true;
+        this.orig.health--;
+    }
     if (Math.abs(this.game.player.x - this.x) <= 500) this.started = true;
     if (this.started) {
         if (this.movingRight) {

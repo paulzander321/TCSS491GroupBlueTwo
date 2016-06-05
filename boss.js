@@ -68,15 +68,8 @@ Boss.prototype.update = function() {
     if (this.health < 1) {
         this.removeFromWorld = true;
         var that = this;
-        // that.game.sounds.gameOverSound.play();
-        setTimeout(function() {
-            // that.game.gameWon = true;
-            that.game.sounds.yeehaw.play();
-            that.game.ctx.translate(that.game.camera.curX - that.game.camera.origX, 0);
-            that.game.entities = [];
-            that.game.makeLevelTwo();
-            // that.game.gameOver = true;
-        }, 2000);
+        that.game.sounds.yeehaw.play();
+        that.game.mapTransition();
     }
 
     if (this.falling && !this.hovering) this.y += 5;
