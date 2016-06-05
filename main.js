@@ -25,8 +25,8 @@ ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
     var gameEngine = new GameEngine();
-    // gameEngine.makeLevelOne();
-    gameEngine.makeLevelTwo();
+    gameEngine.makeLevelOne();
+    // gameEngine.makeLevelTwo();
     gameEngine.init(ctx);
     gameEngine.start();
 });

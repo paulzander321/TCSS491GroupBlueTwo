@@ -135,7 +135,7 @@ function Pterofractal(game, x, y, scale, leftEnd, rightEnd) {
     this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/pterofractal.png"), 2076, 96, 1923, 900, .2, 1, true, false);
     this.currentAnimation = this.animation;
     this.facingRight = false;
-    this.health = 10;
+    this.health = 5;
     this.scaleBy = scale;
     this.leftEnd = leftEnd * 3;
     this.rightEnd = rightEnd * 3;
@@ -207,6 +207,7 @@ Penguin.prototype.constructor = Penguin;
 
 Penguin.prototype.update = function() {
     if (this.health < 1) {
+        this.game.sounds.penguins.play();
         this.removeFromWorld = true;
         this.orig.health--;
     }

@@ -71,7 +71,8 @@ GameEngine.prototype.init = function (ctx) {
         howslife: new Audio("./sound/howslife.wav"),
         ayy: new Audio("./sound/chris.wav"),
         singing: new Audio("./sound/singing_in_the_rain.wav"),
-        lights: new Audio("./sound/lights.wav")
+        lights: new Audio("./sound/lights.wav"),
+        penguins: new Audio("./sound/lights.wav")
     };
     this.sounds.playerDeathSound.volume = 0.5;
     this.sounds.loseTaunt.volume = 0.6;
