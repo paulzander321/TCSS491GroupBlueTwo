@@ -309,7 +309,7 @@ GameEngine.prototype.makeLevelTwo = function() {
     var gundam5 = new Gundam(this, 2185, 174);
     var gundam6 = new Gundam(this, 3378, 126);
 
-    var jawa = new Jawa(this, 588, 143, true);
+    var jawa = new Jawa(this, 570, 143, true);
     var jawa2 = new Jawa(this, 1146, 130, true);
     var jawa3 = new Jawa(this, 1930, 175, false);
     var jawa4 = new Jawa(this, 2288, 174, true);

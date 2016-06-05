@@ -137,8 +137,8 @@ function Pterofractal(game, x, y, scale, leftEnd, rightEnd) {
     this.facingRight = false;
     this.health = 10;
     this.scaleBy = scale;
-    this.leftEnd = leftEnd;
-    this.rightEnd = rightEnd;
+    this.leftEnd = leftEnd * 3;
+    this.rightEnd = rightEnd * 3;
     this.width = this.currentAnimation.frameWidth * scale;
     this.height = this.currentAnimation.frameHeight * scale;
     this.spawnMinion = false;
