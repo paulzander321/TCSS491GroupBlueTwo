@@ -3,8 +3,8 @@ var SCALE = 3; // The size of canvas divided by sprite_frame_width
 var OFFSET_X = 0; // X offset from sprite background
 var OFFSET_Y = 0; // Y offset from sprite background
 
-function Background(game, width, height) {
-    this.game = game;
+function Background(game, width, height, image) {
+    this.image = image;
     this.width = width;
     this.height = height;
     Entity.call(this, game, 0, 0);
@@ -18,7 +18,7 @@ Background.prototype.update = function () {
 
 Background.prototype.draw = function (ctx) {
     //debugger;
-    ctx.drawImage(ASSET_MANAGER.getAsset("./img/stage.png"), 0, 0, this.width * SCALE, this.height * SCALE);
+    ctx.drawImage(this.image, 0, 0, this.width * SCALE, this.height * SCALE);
     Entity.prototype.draw.call(this);
 }
 

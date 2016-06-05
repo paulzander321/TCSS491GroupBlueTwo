@@ -17,6 +17,8 @@ ASSET_MANAGER.queueDownload("./img/dead_robot_flip.png");
 ASSET_MANAGER.queueDownload("./img/dead_robot.png");
 ASSET_MANAGER.queueDownload("./img/health.png");
 ASSET_MANAGER.queueDownload("./img/pterofractal.png");
+ASSET_MANAGER.queueDownload("./img/gunter-penguin.png");
+ASSET_MANAGER.queueDownload("./img/stage2.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Beginning 'Main' Code");
@@ -24,12 +26,13 @@ ASSET_MANAGER.downloadAll(function () {
     var ctx = canvas.getContext('2d');
     var gameEngine = new GameEngine();
     MakeLevelOne(gameEngine);
+    // MakeLevelTwo(gameEngine);
     gameEngine.init(ctx);
     gameEngine.start();
 });
 
 function MakeLevelOne(gameEngine) {
-    gameEngine.background = new Background(gameEngine, 3346, 230);
+    gameEngine.background = new Background(gameEngine, 3346, 230, ASSET_MANAGER.getAsset("./img/stage.png"));
     gameEngine.player = new MegaMan(gameEngine, 387, 500, 1.5, true);
     gameEngine.cameraStart = 387;
     gameEngine.camera = new Camera(gameEngine, gameEngine.player);
@@ -150,12 +153,12 @@ function MakeLevelOne(gameEngine) {
     gameEngine.addEntity(healthHeart);
     gameEngine.addEntity(healthHeart2);
     gameEngine.addEntity(powerup);
-    // gameEngine.addEntity(powerup2)
+    // gameEngine.addEntity(powerup2);
     // gameEngine.addEntity(ladder);
     // gameEngine.addEntity(boss);
     gameEngine.addEntity(deadRobot);
     gameEngine.addEntity(gundam);
-    gameEngine.addEntity(new Pterofractal(gameEngine, 560, 55, .2));
+    gameEngine.addEntity(new Pterofractal(gameEngine, 560, 110, .5));
 
     //Add floor platforms
     gameEngine.addEntity(pBugFix);
@@ -252,6 +255,12 @@ function MakeLevelTwo(gameEngine) {
     ////////////////////////////////////////
     /////////////////MAP 2 PLATFORM DRAWINGS
     ////////////////////////////////////////
+    gameEngine.background = new Background(gameEngine, 3346, 230, ASSET_MANAGER.getAsset("./img/stage2.png"));
+    gameEngine.player = new MegaMan(gameEngine, 387, 400, 1.5, true);
+    gameEngine.cameraStart = 387;
+    gameEngine.camera = new Camera(gameEngine, gameEngine.player);
+    gameEngine.addEntity(gameEngine.camera);
+
     var map2_1 = new Platform(gameEngine, 0, 230, 256 - 0, 230 - 160);
     var map2_2 = new Platform(gameEngine, 256, 230, 320 - 256, 230 - 176);
     var map2_3 = new Platform(gameEngine, 320, 230, 416 - 320, 230 - 192);
@@ -290,6 +299,48 @@ function MakeLevelTwo(gameEngine) {
     var map2_36 = new Platform(gameEngine, 3973, 230, 4105 - 3973, 230 - 175);
     var map2_37 = new Platform(gameEngine, 4105, 230, 4424 - 4105, 230 - 191);
     var map2_38 = new Platform(gameEngine, 4424, 230, 4441 - 4424, 230 - 127);
+
+
+    var hBar = new HealthBar(gameEngine, 10, 10, 200, 30);
+    var deadRobot = new DeadRobot(gameEngine, 375, 142);
+    var gundam = new Gundam(gameEngine, 2952, 187);
+    var spikesTest = new Spikes(gameEngine, 695, 140, 31, 17);
+    var spikes2 = new Spikes(gameEngine, 1141, 224, 33, 21);
+    var spikes3 = new Spikes(gameEngine, 1238, 189, 33, 18);
+    var spikes4 = new Spikes(gameEngine, 1463, 191, 65, 23);
+    // var ladder = new Ladder(gameEngine, 856, 205, 16, 46);
+    // var sp = new SandPerson(gameEngine, 215 * 3, 158 * 3);
+    var jawa = new Jawa(gameEngine, 1625, 158, true);
+    var jawa2 = new Jawa(gameEngine, 632, 110, true);
+    var jawa3 = new Jawa(gameEngine, 3056, 187, false);
+    // var jawa4 = new Jawa(gameEngine, 3246, 187);
+    var healthHeart = new HealthHeart(gameEngine, 1772, 200, 15);
+    var healthHeart2 = new HealthHeart(gameEngine, 2490, 225, 15);
+    var powerup = new Powerup(gameEngine, 450, 126, 15, "rapidfire");
+    // var powerup2 = new Powerup(gameEngine, 3220, 175, 15, "rapidfire");
+    // var boss = new Boss(gameEngine, 250 * 3, 150 * 3);
+
+    gameEngine.addEntity(gameEngine.background);
+    gameEngine.addEntity(new Gundam(gameEngine, 2900, 187));
+    gameEngine.addEntity(new Gundam(gameEngine, 1834, 109));
+    gameEngine.addEntity(new Gundam(gameEngine, 495, 110));
+    gameEngine.addEntity(new DeadRobot(gameEngine, 890, 126));
+    gameEngine.addEntity(new DeadRobot(gameEngine, 800, 200));
+    gameEngine.addEntity(new DeadRobot(gameEngine, 1742, 200));
+    gameEngine.addEntity(new HealthHeart(gameEngine, 825, 204));
+    gameEngine.addEntity(spikes2);
+    gameEngine.addEntity(spikes3);
+    gameEngine.addEntity(spikes4);
+    gameEngine.addEntity(jawa3);
+    gameEngine.addEntity(healthHeart);
+    gameEngine.addEntity(healthHeart2);
+    gameEngine.addEntity(powerup);
+    // gameEngine.addEntity(powerup2);
+    // gameEngine.addEntity(ladder);
+    // gameEngine.addEntity(boss);
+    gameEngine.addEntity(deadRobot);
+    gameEngine.addEntity(gundam);
+    gameEngine.addEntity(new Pterofractal(gameEngine, 560, 110, .5));
 
 
     var map2_R1 = new Platform(gameEngine, 1992, 31, 4441 - 1992, 31 - 0);
@@ -340,4 +391,12 @@ function MakeLevelTwo(gameEngine) {
     gameEngine.addEntity(map2_R2);
     gameEngine.addEntity(map2_R3);
     gameEngine.addEntity(map2_R4);
+
+    gameEngine.addEntity(hBar);
+
+    // gameEngine.addEntity(sp);
+    gameEngine.addEntity(spikesTest);
+    gameEngine.addEntity(gameEngine.player);
+    gameEngine.addEntity(jawa);
+    gameEngine.addEntity(jawa2);
 }

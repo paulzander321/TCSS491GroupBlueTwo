@@ -64,11 +64,13 @@ GameEngine.prototype.init = function (ctx) {
         yeahBaby: new Audio("./sound/ohYeah.wav"),
         yeehaw: new Audio("./sound/yeehaw.wav"),
         groovy: new Audio("./sound/groovy.wav"),
-        ambush: new Audio("./sound/ambush.wav")
+        ambush: new Audio("./sound/ambush.wav"),
+        howslife: new Audio("./sound/howslife.wav"),
+        ayy: new Audio("./sound/chris.wav")
     };
     this.sounds.playerDeathSound.volume = 0.5;
     this.sounds.loseTaunt.volume = 0.6;
-    this.sounds.backgroundMusic.volume = 0.3;
+    this.sounds.backgroundMusic.volume = 0.2;
     this.sounds.backgroundMusic.loop = true;
     this.sounds.backgroundMusic.play();
 

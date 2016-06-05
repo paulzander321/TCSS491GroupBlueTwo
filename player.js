@@ -158,13 +158,14 @@ MegaMan.prototype.update = function() {
             ent.removeFromWorld = true;
             this.game.sounds.groovy.play();
             this.currentHealth += 5;
+            if (this.currentHealth > this.maxHealth) this.currentHealth = this.maxHealth;
         }
         if (ent instanceof Spikes && this.collision(ent)) {
             this.takeDamage(1);
             this.jumping = true;
         }
         if ((ent instanceof DeadRobot || ent instanceof Gundam || ent instanceof Jawa
-             || ent instanceof Boss)
+             || ent instanceof Boss || ent instanceof Penguin)
             && this.collision(ent)) {
             this.takeDamage(3);
         }
@@ -335,7 +336,7 @@ MegaMan.prototype.takeDamage = function(damageAmount) {
             clearInterval(invisibleInterval); //Makes Megaman stop blinking when he can take damage again.
             that.invisible = false;
         }, 1000);
-        this.game.sounds.playerHitSound.play();
+        this.game.sounds.ayy.play();
     }
     console.log("MegaMan has been hit! His health is at " + this.currentHealth);
 }

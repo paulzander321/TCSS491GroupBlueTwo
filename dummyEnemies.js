@@ -32,7 +32,6 @@ DeadRobot.prototype.update = function() {
     if (this.health < 1) this.removeFromWorld = true;
     if (Math.abs(this.game.player.x - this.x) <= 500) this.started = true;
     if (this.started) {
-        if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
         this.movingRight ? this.x += this.game.clockTick * this.speed : this.x -= this.game.clockTick * this.speed;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];

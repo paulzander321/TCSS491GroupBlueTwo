@@ -148,9 +148,13 @@ Pterofractal.prototype = new Entity();
 Pterofractal.prototype.constructor = Pterofractal;
 
 Pterofractal.prototype.update = function() {
+    if (Math.abs(this.game.player.x - this.x) <= 600) {
+        this.game.sounds.howslife.play();
+    }
     if (this.spawnMinion) {
         this.spawnMinion = false;
-        this.game.addEntity(new Gundam(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3));
+        this.game.addEntity(new Penguin(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3, 1));
+        // this.game.addEntity(new Gundam(this.game, (this.x + this.width / 2) / 3, (this.y + 10) / 3, 2));
     }
     this.x -= 5;
     if (this.x + this.width < 0) this.removeFromWorld = true;
@@ -162,6 +166,78 @@ Pterofractal.prototype.draw = function(ctx) {
     this.width = this.currentAnimation.frameWidth * this.scaleBy;
     this.height = this.currentAnimation.frameHeight * this.scaleBy;
     Entity.prototype.draw.call(this);
+}
+
+function Penguin(game, x, y, scale) {
+    this.platform = null;
+    this.falling = true;
+    this.health = 3;
+    this.invincible = false;
+    this.movingRight = false;
+    this.invisible = false;
+    this.waddleRightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/gunter-penguin.png"), 100, 300, 37, 42, .2, 7, true, false);
+    this.waddleLeftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/gunter-penguin.png"), 96, 346, 37, 42, .2, 7, true, true);
+    this.currentAnimation = this.waddleLeftAnimation;
+    this.width = this.currentAnimation.frameWidth * scale;
+    this.height = this.currentAnimation.frameHeight * scale;
+    this.scaleBy = scale;
+    Entity.call(this, game, x * 3, y * 3);
+}
+
+Penguin.prototype = new Entity();
+Penguin.prototype.constructor = Penguin;
+
+Penguin.prototype.update = function() {
+    if (this.health < 1) this.removeFromWorld = true;
+    if (Math.abs(this.game.player.x - this.x) <= 500) this.started = true;
+    if (this.started) {
+        this.x -= 1;
+        for (var i = 0; i < this.game.entities.length; i++) {
+            var ent = this.game.entities[i];
+            if (ent instanceof Platform && this.collision(ent)) {
+                this.falling = false;
+                this.platform = ent;
+            } else if (ent instanceof Projectile && this.collision(ent)) {
+                ent.removeFromWorld = true;
+                this.health--;
+                var that = this;
+                var invisibleInterval = setInterval(function() {
+                    that.invisible = !that.invisible;
+                }, 50);
+                setTimeout(function() {
+                    clearInterval(invisibleInterval);
+                    that.invisible = false;
+                }, 500);
+            }
+        }
+        if (this.falling) this.y += 5;
+        if (this.platform && this.x < this.platform.x) this.falling = true;
+        Entity.prototype.update.call(this);
+    }
+}
+
+Penguin.prototype.draw = function(ctx) {
+    if (this.facingRight) {
+        this.currentAnimation = this.waddleRightAnimation;
+    } else {
+        this.currentAnimation = this.waddleLeftAnimation;
+    }
+    if (!this.invisible) this.currentAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleBy);
+    this.width = this.currentAnimation.frameWidth * this.scaleBy;
+    this.height = this.currentAnimation.frameHeight * this.scaleBy;
+    Entity.prototype.draw.call(this);
+}
+
+Penguin.prototype.collision = function(other) {
+    var collisionX = (this.x >= other.x && this.x <= other.x + other.width)
+                        || (this.x + this.width >= other.x && this.x + this.width <= other.x + other.width)
+                        || (this.x >= other.x && this.x + this.width <= other.x + other.width)
+                        || (other.x >= this.x && other.x + other.width <= this.x + this.width);
+    var collisionY = (this.y <= other.y && this.y >= other.y - other.height)
+                        || (this.y - this.height <= other.y && this.y - this.height >= other.y - other.height)
+                        || (this.y - this.height >= other.y - other.height && this.y <= other.y)
+                        || (other.y <= this.y && other.y - other.height >= this.y - this.height);
+    return collisionX && collisionY;
 }
 
 // function SandPerson(game, x, y) {
